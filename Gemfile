@@ -32,6 +32,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'passenger'
 gem 'devise'
+gem 'koala', '~> 2.2'
 
 
 group :development, :test do
