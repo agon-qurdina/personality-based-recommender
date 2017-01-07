@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20170107200454) do
   create_table "facebooks", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "fb_id"
+    t.string   "access_token"
     t.integer  "friends_count"
     t.decimal  "friends_density"
     t.datetime "created_at",      null: false
