@@ -28,7 +28,8 @@ class UserController < ApplicationController
   def user_info
     oauth_access_token = session[:user_fb_token]
     @graph = Koala::Facebook::API.new(oauth_access_token)
-    profile = @graph.get_object(:me, { fields: [:last_name,
+    profile = @graph.get_object(:me, { fields: [:first_name,
+                                                :last_name,
                                                 :birthday,
                                                 :gender,
                                                 :about,
