@@ -66,6 +66,7 @@
                 alert("The person is not logged into Facebook, so we're not sure if they are logged into this app or not..");
             }
         }, {scope: 'public_profile,email,user_friends,user_about_me,user_birthday,user_hometown,user_posts,user_religion_politics,'});
+        return false;
     }
 
     function logout() {
@@ -81,6 +82,7 @@
                 }
             });
         });
+        return false;
     }
     
     function get_status() {
@@ -97,6 +99,7 @@
                 }
             });
         });
+        return false;
     }
 
     //SCOPES:
