@@ -11,7 +11,7 @@ class Facebook < ApplicationRecord
 
   def graph_api
     begin
-      @graph ||= Koala::Facebook::API.new(access_token)
+      @graph ||= Koala::Facebook::API.new(access_token, '99c84ab6d14e8826ca63b2b06ba8ab31')
     rescue => ex
       logger.error ex.message
     end
@@ -19,6 +19,10 @@ class Facebook < ApplicationRecord
 
   def friends_count
     self[:friends_count] ||= graph_api.get_connections('me', 'friends').raw_response['summary']['total_count']
+  end
+
+  def taggable_friends
+    graph_api.get_connections('me', 'taggable_friends').raw_response
   end
 
   def posts_with_message(limit = 200)
@@ -29,7 +33,10 @@ class Facebook < ApplicationRecord
       response = graph_api.get_connections('me', 'posts', { fields: 'message' })
 
       loop do
-        posts_with_message += response.to_a.select { |i| i['message'] }
+        posts_with_message += response.to_a.select { |i| i['message'] }.each do |post|
+          post['words_count'] = post['message'].to_s.split(/[\p{Alpha}\-']+/).count
+          post['hashtags_count'] = post['message'].to_s.scan(/#([A-Za-z0-9]+)/).size
+        end
 
         puts posts_with_message.length
         break if not (response = response.next_page) or posts_with_message.length > limit
@@ -40,19 +47,10 @@ class Facebook < ApplicationRecord
   end
 
   # Obtain yours from https://developers.facebook.com/tools/explorer?method=GET&path=me&version=v2.8
-  def access_token
-    @access_token ||= 'EAACEdEose0cBAIgghRBkZAtPyvPOXr2RLIfIzjGzBm6mvAVAIdxVlUEKxVllTa6AZACsLNzyrMAZCaReRKGPjiorm8ObmOSSpmzD34vxZBAMZCuKQi5zkiETME98bUpWqO2et7DWYU4JEnanBIrpiKQ14vNbFpCW4GUsZBH524ygZDZD'
-  end
+  # def access_token
+  #   @access_token ||= 'EAACEdEose0cBAIgghRBkZAtPyvPOXr2RLIfIzjGzBm6mvAVAIdxVlUEKxVllTa6AZACsLNzyrMAZCaReRKGPjiorm8ObmOSSpmzD34vxZBAMZCuKQi5zkiETME98bUpWqO2et7DWYU4JEnanBIrpiKQ14vNbFpCW4GUsZBH524ygZDZD'
+  # end
 
-  # @param documents Array
-  # Format:
-  # [
-  #     {
-  #         language: 'en',
-  #         id: 1,
-  #         text: 'Hello world, im trying to calculate the sentiment of this buetifull post.'
-  #     }
-  # ]
   def posts_with_sentiment
     @posts_with_sentiment ||= begin
       apiKey = "25a09e5c2a37450f8598d10c70757e72"
@@ -96,7 +94,31 @@ class Facebook < ApplicationRecord
         sum += post['sentiment']
       end
 
-      sum / posts.length
+      sum / posts.length.to_f
+    end
+  end
+
+  def words_per_post
+    self[:words_per_post] ||= begin
+      sum = 0
+
+      posts_with_message.each do |post|
+        sum += post['words_count']
+      end
+
+      sum / posts_with_message.length.to_f
+    end
+  end
+
+  def hashtags_per_post
+    self[:hashtags_per_post] ||= begin
+      sum = 0
+
+      posts_with_message.each do |post|
+        sum += post['hashtags_count']
+      end
+
+      sum / posts_with_message.length.to_f
     end
   end
 
@@ -117,24 +139,19 @@ class Facebook < ApplicationRecord
           :books,
           :favorite_athletes,
           :favorite_teams
-      ]})
+      ] })
 
-      personal_info[:last_name_length] = response[:last_name].nil? ? 0 :response[:last_name].length
+      personal_info[:last_name_length] = response['last_name'].nil? ? 0 : response['last_name'].length
       personal_info[:relationship_status] = !response[:relationship_status].nil?
-      personal_info[:activities_length] = response[:interested_in].nil? ? 0 : response[:interested_in].length
-      personal_info[:favorites_count] = (response[:favorite_athletes].nil? ? 0 : response[:favorite_athletes].count) + (response[:favorite_teams].nil? ? 0 : response[:favorite_teams].count) + (response[:books].nil? ? 0 : response[:books].count)
+      personal_info[:activities_length] = response['interested_in'].nil? ? 0 : response['interested_in'].length
+      personal_info[:favorites_count] = (response['favorite_athletes'].nil? ? 0 : response['favorite_athletes'].count) + (response['favorite_teams'].nil? ? 0 : response['favorite_teams'].count) + (response['books'].nil? ? 0 : response['books'].count)
 
       personal_info
     end
   end
 
   def last_name_length
-    begin
-      length = personal_info[:last_name_length]
-      self[:last_name_length] ||= length
-    rescue => ex
-      logger.error ex.message
-    end
+    self[:last_name_length] ||= personal_info[:last_name_length]
   end
 
   def relationship_status

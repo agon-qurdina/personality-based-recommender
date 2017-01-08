@@ -5,14 +5,6 @@ class ApplicationController < ActionController::Base
 
     facebook = Facebook.first
 
-    p facebook.avg_posts_sentiment
-    p facebook.avg_posts_sentiment
-    p facebook.avg_posts_sentiment
-    p facebook.friends_count
-
-    facebook.save
-
-    render json: facebook
-
+    render json: facebook.personal_info #.posts_with_message
   end
 end
