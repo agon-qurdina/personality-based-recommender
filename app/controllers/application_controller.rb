@@ -3,10 +3,15 @@ class ApplicationController < ActionController::Base
 
   def test
 
-    facebook = Facebook.new
+    facebook = Facebook.first
 
+    p facebook.avg_posts_sentiment
+    p facebook.avg_posts_sentiment
+    p facebook.avg_posts_sentiment
+    p facebook.friends_count
+    facebook.save
 
-    render json: facebook.avg_posts_sentiment
+    render json: facebook
 
   end
 end
