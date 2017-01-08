@@ -1,8 +1,8 @@
 class Facebook < ApplicationRecord
 
-  def initialize(token)
-    @access_token = token
-  end
+  # def initialize(token)
+  #   @access_token = token
+  # end
 
   #10203046630585298?fields=context.fields(mutual_friends)
   def profile
@@ -10,11 +10,7 @@ class Facebook < ApplicationRecord
   end
 
   def graph_api
-    begin
       @graph ||= Koala::Facebook::API.new(access_token, '99c84ab6d14e8826ca63b2b06ba8ab31')
-    rescue => ex
-      logger.error ex.message
-    end
   end
 
   def friends_count
@@ -141,6 +137,7 @@ class Facebook < ApplicationRecord
           :favorite_teams
       ] })
 
+      personal_info[:fb_id] = response['id']
       personal_info[:last_name_length] = response['last_name'].nil? ? 0 : response['last_name'].length
       personal_info[:relationship_status] = !response[:relationship_status].nil?
       personal_info[:activities_length] = response['interested_in'].nil? ? 0 : response['interested_in'].length
@@ -159,11 +156,15 @@ class Facebook < ApplicationRecord
   end
 
   def activities_length
-    self[:activities_length] ||= personal_info[:activities_length]
+      self[:activities_length] ||= personal_info[:activities_length]
   end
 
   def favorites_count
     self[:favorites_count] ||= personal_info[:favorites_count]
+  end
+
+  def fb_id
+    self[:fb_id] ||= personal_info[:fb_id]
   end
 
 end

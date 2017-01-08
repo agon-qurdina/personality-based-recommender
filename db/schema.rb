@@ -10,25 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170108183446) do
+ActiveRecord::Schema.define(version: 20170108215419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "facebooks", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "fb_id"
+    t.text     "fb_id"
     t.string   "access_token"
     t.integer  "friends_count"
     t.decimal  "friends_density"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.decimal  "avg_posts_sentiment"
-    t.decimal  "words_per_post"
-    t.decimal  "hashtags_per_post"
     t.boolean  "relationship_status"
     t.integer  "last_name_length"
-    t.integer  "activties_length"
+    t.integer  "activities_length"
     t.integer  "favorites_count"
     t.index ["user_id"], name: "index_facebooks_on_user_id", using: :btree
   end

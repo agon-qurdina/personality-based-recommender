@@ -27,12 +27,14 @@ class UserController < ApplicationController
 
   def user_info
     oauth_access_token = session[:user_fb_token]
-    facebook = Facebook.new(oauth_access_token)
-    #p facebook.avg_posts_sentiment
-    #p facebook.friends_count
+    facebook = Facebook.new
+    facebook.access_token=oauth_access_token
+    facebook.avg_posts_sentiment
+    facebook.friends_count
+    facebook.fb_id
     facebook.last_name_length
     facebook.relationship_status
-    facebook.activties_length
+    facebook.activities_length
     facebook.favorites_count
     facebook.save!
     render json: facebook
