@@ -1,0 +1,182 @@
+<h1>User#login</h1>
+
+<p><a id="btn-login" onclick="return login();" href="">Log In</a></p>
+<p><a id="btn-logout" onclick="return logout();" href="">Log Out</a></p>
+<p><a id="btn-check-status" onclick="return get_status();" href="">Check Status</a></p>
+<p><a id="get-user-info" href="">Get User Info</a></p>
+
+<!--<div-->
+<!--class="fb-like"-->
+<!--data-share="true"-->
+<!--data-width="450"-->
+<!--data-show-faces="true">-->
+<!--</div>-->
+
+<!--<div id="fb-root"></div>-->
+
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '1191904330893043',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v2.8'
+        });
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<script>
+    $('#get-user-info').on('click', function () {
+        $.ajax({
+            url: 'user_info',
+            success: function (data) {
+                console.log('User info:', data);
+            },
+            error: function (err1, err2) {
+                alert('Error: \n' + JSON.stringify(err1) + '\n' + JSON.stringify(err2));
+            }
+        });
+    });
+
+    function login() {
+        FB.login(function(response) {
+            console.log(response);
+            if (response.status === 'connected') {
+                alert('Logged in!');
+                $.ajax({
+                    url: 'login_callback',
+                    data: {token: response.authResponse.accessToken},
+                    success: function(data){
+                    },
+                    error: function (err1, err2) {
+                        alert(JSON.stringify(err1) + '\n' + JSON.stringify(err2));
+                    }
+                });
+            } else if (response.status === 'not_authorized') {
+                alert('The person is logged into Facebook, but not your app.');
+            } else {
+                alert("The person is not logged into Facebook, so we're not sure if they are logged into this app or not..");
+            }
+        }, {scope:
+                'public_profile,'+
+                'user_friends,'+
+                'email,'+
+                'user_hometown,'+
+                'user_likes,'+
+                'user_location,'+
+                'user_about_me,'+
+                'user_birthday,'+
+                'user_actions.books,'+
+                'user_actions.fitness,'+
+                'user_actions.music,'+
+                'user_actions.news,'+
+                'user_actions.video,'+
+                'user_education_history,'+
+                'user_events,'+
+                'user_games_activity,'+
+                'user_managed_groups,'+
+                'user_photos,'+
+                'user_posts,'+
+                'user_relationships,'+
+                'user_relationship_details,'+
+                'user_religion_politics,'+
+                'user_tagged_places,'+
+                'user_videos,'+
+                'user_website,'+
+                'user_work_history,'+
+                'read_custom_friendlists,'+
+                'read_insights,'+
+                'read_audience_network_insights'
+//                'read_page_mailboxes'
+        });
+        return false;
+    }
+
+    function logout() {
+        FB.logout(function(response) {
+            // Person is now logged out
+            alert('logged out');
+            $.ajax({
+                url: 'logout_callback',
+                success: function(data){
+                },
+                error: function (err1, err2) {
+                    alert(JSON.stringify(err1) + '\n' + JSON.stringify(err2));
+                }
+            });
+        });
+        return false;
+    }
+    
+    function get_status() {
+        FB.getLoginStatus(function(response) {
+            alert(response.status);
+            console.log(response);
+            $.ajax({
+                url: 'get_token',
+                success: function(data){
+                    console.log(data);
+                },
+                error: function (err1, err2) {
+                    alert(JSON.stringify(err1) + '\n' + JSON.stringify(err2));
+                }
+            });
+        });
+        return false;
+    }
+
+    //SCOPES:
+    //    public_profile
+    //    user_friends
+    //    email
+    //    user_about_me
+    //    user_actions.books
+    //    user_actions.fitness
+    //    user_actions.music
+    //    user_actions.news
+    //    user_actions.video
+    //    user_actions:{app_namespace}
+    //    user_birthday
+    //    user_education_history
+    //    user_events
+    //    user_games_activity
+    //    user_hometown
+    //    user_likes
+    //    user_location
+    //    user_managed_groups
+    //    user_photos
+    //    user_posts
+    //    user_relationships
+    //    user_relationship_details
+    //    user_religion_politics
+    //    user_tagged_places
+    //    user_videos
+    //    user_website
+    //    user_work_history
+    //    read_custom_friendlists
+    //    read_insights
+    //    read_audience_network_insights
+    //    read_page_mailboxes
+    //    manage_pages
+    //    publish_pages
+    //    publish_actions
+    //    rsvp_event
+    //    pages_show_list
+    //    pages_manage_cta
+    //    pages_manage_instant_articles
+    //    ads_read
+    //    ads_management
+    //    business_management
+    //    pages_messaging
+    //    pages_messaging_subscriptions
+    //    pages_messaging_payments
+    //    pages_messaging_phone_number
+</script>
