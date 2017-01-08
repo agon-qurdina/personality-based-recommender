@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170107163717) do
+ActiveRecord::Schema.define(version: 20170107222958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "fb_stats", force: :cascade do |t|
+    t.string   "access_token",      null: false
+    t.integer  "user_id"
+    t.decimal  "openness",          null: false
+    t.decimal  "conscientiousness", null: false
+    t.decimal  "extraversion",      null: false
+    t.decimal  "agreeableness",     null: false
+    t.decimal  "neuroticism",       null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["user_id"], name: "index_fb_stats_on_user_id", using: :btree
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -32,4 +45,5 @@ ActiveRecord::Schema.define(version: 20170107163717) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "fb_stats", "users"
 end
