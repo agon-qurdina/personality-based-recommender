@@ -1,12 +1,20 @@
 class Facebook < ApplicationRecord
 
+  def initialize(token)
+    @access_token = token
+  end
+
   #10203046630585298?fields=context.fields(mutual_friends)
   def profile
     graph_api.get_object('me')
   end
 
   def graph_api
-    @graph ||= Koala::Facebook::API.new(access_token)
+    begin
+      @graph ||= Koala::Facebook::API.new(access_token)
+    rescue => ex
+      logger.error ex.message
+    end
   end
 
   def friends_count
@@ -91,4 +99,54 @@ class Facebook < ApplicationRecord
       sum / posts.length
     end
   end
+
+  def personal_info
+    @personal_info ||= begin
+      personal_info = {}
+
+      response = graph_api.get_object(:me, { fields: [
+          :first_name,
+          :last_name,
+          :birthday,
+          :gender,
+          :about,
+          :inspirational_people,
+          :interested_in,
+          :religion,
+          :relationship_status,
+          :books,
+          :favorite_athletes,
+          :favorite_teams
+      ]})
+
+      personal_info[:last_name_length] = response[:last_name].nil? ? 0 :response[:last_name].length
+      personal_info[:relationship_status] = !response[:relationship_status].nil?
+      personal_info[:activities_length] = response[:interested_in].nil? ? 0 : response[:interested_in].length
+      personal_info[:favorites_count] = (response[:favorite_athletes].nil? ? 0 : response[:favorite_athletes].count) + (response[:favorite_teams].nil? ? 0 : response[:favorite_teams].count) + (response[:books].nil? ? 0 : response[:books].count)
+
+      personal_info
+    end
+  end
+
+  def last_name_length
+    begin
+      length = personal_info[:last_name_length]
+      self[:last_name_length] ||= length
+    rescue => ex
+      logger.error ex.message
+    end
+  end
+
+  def relationship_status
+    self[:relationship_status] ||= personal_info[:relationship_status]
+  end
+
+  def activities_length
+    self[:activities_length] ||= personal_info[:activities_length]
+  end
+
+  def favorites_count
+    self[:favorites_count] ||= personal_info[:favorites_count]
+  end
+
 end
