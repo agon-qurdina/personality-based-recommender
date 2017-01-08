@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
     facebook = Facebook.new
 
 
-    render json: facebook.friends_count
+    render json: facebook.avg_posts_sentiment
 
   end
 end
