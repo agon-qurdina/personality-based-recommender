@@ -1,9 +1,12 @@
 <h1>User#login</h1>
 
+<p id="status"></p>
+
 <p><a id="btn-login" onclick="return login();" href="">Log In</a></p>
 <p><a id="btn-logout" onclick="return logout();" href="">Log Out</a></p>
-<p><a id="btn-check-status" onclick="return get_status();" href="">Check Status</a></p>
+<!--<p><a id="btn-check-status" onclick="return get_status();" href="">Check Status</a></p>-->
 <p><a id="get-user-info" href="">Get User Info</a></p>
+<p><a id="get-user-friends" href="">Get User Friends</a></p>
 
 <!--<div-->
 <!--class="fb-like"-->
@@ -22,6 +25,7 @@
             xfbml      : true,
             version    : 'v2.8'
         });
+        get_status();
     };
 
     (function(d, s, id){
@@ -31,9 +35,7 @@
         js.src = "//connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-</script>
 
-<script>
     $('#get-user-info').on('click', function () {
         $.ajax({
             url: 'user_info',
@@ -44,6 +46,20 @@
                 alert('Error: \n' + JSON.stringify(err1) + '\n' + JSON.stringify(err2));
             }
         });
+        return false;
+    });
+
+    $('#get-user-friends').on('click', function () {
+        $.ajax({
+            url: 'user_friends',
+            success: function (data) {
+                console.log('User friends:', data);
+            },
+            error: function (err1, err2) {
+                alert('Error: \n' + JSON.stringify(err1) + '\n' + JSON.stringify(err2));
+            }
+        });
+        return false;
     });
 
     function login() {
@@ -55,6 +71,7 @@
                     url: 'login_callback',
                     data: {token: response.authResponse.accessToken},
                     success: function(data){
+                        get_status();
                     },
                     error: function (err1, err2) {
                         alert(JSON.stringify(err1) + '\n' + JSON.stringify(err2));
@@ -107,6 +124,7 @@
             $.ajax({
                 url: 'logout_callback',
                 success: function(data){
+                    get_status();
                 },
                 error: function (err1, err2) {
                     alert(JSON.stringify(err1) + '\n' + JSON.stringify(err2));
@@ -118,8 +136,8 @@
     
     function get_status() {
         FB.getLoginStatus(function(response) {
-            alert(response.status);
             console.log(response);
+            $('#status').text(response.status);
             $.ajax({
                 url: 'get_token',
                 success: function(data){

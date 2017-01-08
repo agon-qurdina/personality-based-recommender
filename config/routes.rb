@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   get 'get_token', to: 'user#get_token'
   get 'logout_callback', to: 'user#logout_callback'
   get 'user_info', to: 'user#user_info'
+  get 'user_friends', to: 'user#user_friends'
 end
