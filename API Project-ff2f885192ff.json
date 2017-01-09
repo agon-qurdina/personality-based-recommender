@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "api-project-185322985912",
+  "private_key_id": "ff2f885192ff7521b8bb29e39106f5203eac259b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDBxjhhlBxOPi2z\n9MgJmk5vHfy6e8fz/JQpzb5aK0vX2lkZfoFe6uTLcnAbYN6LqR/bpp53EQ//i27a\nIIoFgAitWZT+HAoH8W1muHOSVvql+RfvxBCd04fUJwFrP5m7PcOt6IK+AWRapaR2\nddXK6iB97dX3/EH1rtbvqi+Xh3MS3NqIaGMLF/EU++2VSbi9TgSHMv2HM4YzPb9U\n1pfXhuXP1W5GbFEX9hOj8Q7tH7ZOvZsxL7NzjRS3eTeRmp/ilm20xwPUE1AYjgOH\nah0i/6OrQ7q5pY0V/y0IJhs39XmRjE7hVzuaV3oo3obhv51eHM/YL0RZ9hGyfsXE\nnctXfnm/AgMBAAECggEAYrN66Iku2dPmJ7HZarrElOjrYHnIYckYFysLeJZxLWO0\n2r2LXDO9kruZyvhOo0jkR1fZg8CXK410S3sjkqWixdnJgJ37pgwds6Lki3fueDgn\nLyPpatriZvfvSxe8UJmnYJ/8aJgA7ANPgF+JJLCZGEvbH1PIrUH/jVhcoYyG2uXs\nrbMzL1S+GpK1WM2j9bkln7I/i0dZT4MhSCBxqqS8ZNRUM3uuUcI35GeQ13fqQ3Rx\nNCFpETKLBEWrUI338UcryFzl1Aka1xWihNKWJX3bGt7EXC1RiWdR5+7Vs/6xn32z\nvsaacrl4dzhewtnKYK9XpLLFYI37AiCMcs3NYkonkQKBgQDt8EuEEptMbjzLm9AP\n+Fxdbuu4lMn+ULDsDuaMBk4kuMQ2z6WZLlMeZBDWNM5uAFq7Ijk2cdaG+KD0y7kV\n8leVhGNry92zJdsqk8EHXop8K0xadbBiuvOLKQLRf3wKdcbPicBvksmklPzwAhYX\n8q1XetogWZbkWipQTFajCZYRHQKBgQDQe7Vds4OkNjlERez2JwT7rN6/1eCfb9oi\n1cae8U4M3HjYT5btjXQS2Kht21uu80aCzSjov6wfWr8MiZgo7xI/+3A7CHKaoW+z\n1M7elQS1sHMQfMFbch85Rl6d2znwcviP6x5rBjhlClO/T0Efvjby1caPyLOBs3gp\nEBZxmh+7iwKBgGKg/syKYfF2qKDFv6M/EhpwxilHE8vlatEPBCX63x19sWf+/ufW\nOgIY/JmuXftfDj0P3KNi4Mgl+6I9aEVepUuHCyc95HJEOOsXQCZr2//IeufsbOcg\nE6AVqeNpcuNrGrQgp7IYKJmeYJKkasAWih/+/rf2KwQRFAUg/7CpYplJAoGBAL+g\nVY3wyJkRNgXo9+sw5kWmGX/eSH6Dws6uC8hgJ8tugqzgSuvCTuRbvERtkZH3DeKA\nTI/STZTsRhpyBifpxq6EoB3CoAQ9SnzSp+qysgeGTdzjrp4tAUIVyjXyIQk/w/QU\nunrI1uEYYu2/HS7eGYeOstnKMiSPH20u2lJExdINAoGBANb2DITHJWeO5T9BbQpc\n6kh9a9bT1rYsyitQEOKqT5E5jAFnUAxivqyckYRuXxDteKPrBOg95Kb2op3It50J\n1oqyWmXBAGUcB0YKHgltsHe3c5GVXttXS4QRwDL1flZbIPeJrSXpC3n5HH+roWZi\nMveUFZGygey721O4+4CnaTJO\n-----END PRIVATE KEY-----\n",
+  "client_email": "personality-recommendation@api-project-185322985912.iam.gserviceaccount.com",
+  "client_id": "111908637320202258402",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/personality-recommendation%40api-project-185322985912.iam.gserviceaccount.com"
+}

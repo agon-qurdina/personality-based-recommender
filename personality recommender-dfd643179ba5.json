@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "personality-recommender-155120",
+  "private_key_id": "dfd643179ba5a9162742bb89533773fe5a9a4789",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC1Ztfnnh18wJ2O\n0KjvlXWATYTs901l6i5/hhTHnm2FEPeC+CUKdIfKdEIWGK4vRTFartLnHaYvDcGw\nTVEGJFFUScqDlsZpI6iKl2wPYC6VMF2GHEx5J4I4FrMMPsyWVt/lmpnTQmDUuLYR\nYUfSN1O3FTxsV/OPxuunpVDHR0ZRiT15zjJoyKH8J0qGAZDA4Rn3fagXev3Ywv0k\nKjSJRFOzZfr2/JgOCNxn4fw4CaWHB3hEzhE5B/fWGKfTY+pQicl9AiO/wcIhSIkH\ndgLXlEPxyMP55+fa1uUC5GoRj5NXdykpupXwqKihe7Lo2uVy2onSrpWPbjrjwPMm\nB9zB9vF1AgMBAAECggEALv8lApHZS9/PMhfnHKMZHRN4U7hCahwAzfMb4RevgiEC\nLwFA/3NvVslF8dmVDxQbFEZkx5HL4zbqLlXpnvC7zV2MxQjEAKtHWBig217s0qQE\nJuGgAmd0+jkPTCXc9TouqZqjLbNtyM7OBLSyWckRvEYZMGyc4mwD05wl0Gsr0aWQ\nAn/upWBXeyGKVpM+D1CsTfCzfFo1lEUf0AZBUaheT3F2ovnLzI4zuNBKEuhvb2jd\nJUwGCD7UZddRPQZzmeWt0yyK6OehhyzeV5xV+l7P+RP4nP5eOjwPC6iG6tIx+Jud\nSTULoLcsBQrF2OfetIzsfeYmyaK63eGpzQUmAMdugQKBgQDcTq3APR7pr5AHLPn4\nukLtsUb/wuXIaTVmoYlw9Jrd0pPBRugbeFrcUJam0ka2PNOE5+ETXeYIsnxtE5nr\ncA3q6o1zc1P9WfVNWhx10yxL/K6Dii91Glsve3FnFqfFD4FzmOJkD6SBsVBOWqMQ\ns42oTQpjNy7swkvlb7Fh5czMYQKBgQDSyoqegjkIgQuEqVqCn18cFkCG32ur4ICy\nChkL9CrPdMeUV4YNq2+573WgpWVMcM/QHAekwmChrRc66OzMzKcdoNGvYxy4ieTE\nlpZ0cgW4ACPcVndPck1m62d0IY/3u2JIlrRjbVR5Qf95TpSX50a2sI6kAHGJInWd\nwHxWy70dlQKBgQCq8HWK2yH4SpvjpXdUEhpKWipv2yb2KQQhXSfKuFDN202AQ2dn\noSxHFFTAnhn13x50WoNexpXtm6hF7laYwvpZk6MruImr5Dgcy9WXasJNN4OlVvxZ\nzZiBMDQevApzMgPM0QygfS603wMjuNob5GX+98AembvUQzImlVK6VldhIQKBgCYy\nldQLfRJRcCjmF4S8JJwOXDsUmYpX8HpS4h8MbAWT/+adxakMe/6RqhsmXajweHgZ\n3Di7EI+7sg32z5J9M3tm/RhvOXEna9FECJepYefp/pWbBZvb9rLDzcd5nYEi77h/\ntsids0UV9Jmi58JvIp1QeUi229wh5nZjvyRrXyXRAoGBAKaVvfMYoGulLqiaxjlO\nDOjrtZOu94E1qRaRmcDW47gwECz2w7DptyhznlvZuI9tXB/p9W4MBFvpGEtK4ZGs\nsMHF6Ailu/qqbS1mF19xq4WRhEyvZeCp4a/GmG6+0bBtCE5n29M4RIEZ5/J0bz+n\nJBUWwAvTFdecc933nOP0Qb5M\n-----END PRIVATE KEY-----\n",
+  "client_email": "personality-recommender@personality-recommender-155120.iam.gserviceaccount.com",
+  "client_id": "111111569694176207230",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/personality-recommender%40personality-recommender-155120.iam.gserviceaccount.com"
+}
