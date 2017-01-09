@@ -1,9 +1,4 @@
 class Facebook < ApplicationRecord
-
-  # def initialize(token)
-  #   @access_token = token
-  # end
-
   #10203046630585298?fields=context.fields(mutual_friends)
   def profile
     graph_api.get_object('me')
@@ -47,6 +42,38 @@ class Facebook < ApplicationRecord
   #   @access_token ||= 'EAACEdEose0cBAIgghRBkZAtPyvPOXr2RLIfIzjGzBm6mvAVAIdxVlUEKxVllTa6AZACsLNzyrMAZCaReRKGPjiorm8ObmOSSpmzD34vxZBAMZCuKQi5zkiETME98bUpWqO2et7DWYU4JEnanBIrpiKQ14vNbFpCW4GUsZBH524ygZDZD'
   # end
 
+  def translate_statuses(statuses)
+    if statuses.count == 0
+      return
+    end
+    google_token = 'ya29.El_OA6qOljjavTGd9Wy1yLt1xx6q6W1723rsfbslRz8orxK6o6H_U_N6k3Fgp2Mc5WuJakspxpt6PCUSQdJ9gtK7cUwVbg_IWrQujN4VFMKfncmYjz85cUMV4WjcJKEFIQ'
+    url_text = 'https://translation.googleapis.com/language/translate/v2?'
+    statuses.each do |status|
+        status.gsub!('#', '@@ ')
+        url_text += ('q='+ status +'&')
+    end
+    url = URI.parse(url_text)
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    headers = {
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer ' + google_token
+    }
+    data = {
+        source: 'sq',
+        target: 'en',
+        format: 'text'
+    }
+    path = url.path + '?' + url.query
+    response = JSON.parse(http.post(path, data.to_json, headers).body)
+    statuses = []
+    response['data']['translations'].each do |translation|
+      translation['translatedText'].gsub!('@@ ', '#')
+      statuses.push translation['translatedText']
+    end
+    statuses
+  end
+
   def posts_with_sentiment
     @posts_with_sentiment ||= begin
       apiKey = "25a09e5c2a37450f8598d10c70757e72"
@@ -65,6 +92,10 @@ class Facebook < ApplicationRecord
       posts_with_message.each { |i| posts[i['id']] = i }
 
       documents = posts.values.map { |i| { language: 'en', id: i['id'], text: i['message'] } }
+
+      texts = posts.values.map { |i| i['message'] }
+      texts = translate_statuses texts
+      documents.each_with_index { |doc, i| doc['text'] = texts[i] }
 
       data = {
           documents: documents
