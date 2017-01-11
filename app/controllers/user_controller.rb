@@ -31,6 +31,9 @@ class UserController < ApplicationController
     facebook.access_token=oauth_access_token
     facebook.avg_posts_sentiment
     facebook.friends_count
+    facebook.hashtags_per_post
+    facebook.links_per_post
+    facebook.words_per_post
     facebook.fb_id
     facebook.last_name_length
     facebook.relationship_status

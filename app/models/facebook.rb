@@ -1,3 +1,4 @@
+require 'google/apis/translate_v2'
 class Facebook < ApplicationRecord
   #10203046630585298?fields=context.fields(mutual_friends)
   def profile
@@ -27,6 +28,7 @@ class Facebook < ApplicationRecord
         posts_with_message += response.to_a.select { |i| i['message'] }.each do |post|
           post['words_count'] = post['message'].to_s.split(/[\p{Alpha}\-']+/).count
           post['hashtags_count'] = post['message'].to_s.scan(/#([A-Za-z0-9]+)/).size
+          post['links_count'] = post['message'].to_s.scan(/(http|https):/).size
         end
 
         puts posts_with_message.length
@@ -37,41 +39,28 @@ class Facebook < ApplicationRecord
     end
   end
 
-  # Obtain yours from https://developers.facebook.com/tools/explorer?method=GET&path=me&version=v2.8
-  # def access_token
-  #   @access_token ||= 'EAACEdEose0cBAIgghRBkZAtPyvPOXr2RLIfIzjGzBm6mvAVAIdxVlUEKxVllTa6AZACsLNzyrMAZCaReRKGPjiorm8ObmOSSpmzD34vxZBAMZCuKQi5zkiETME98bUpWqO2et7DWYU4JEnanBIrpiKQ14vNbFpCW4GUsZBH524ygZDZD'
-  # end
-
-  def translate_statuses(statuses)
-    if statuses.count == 0
+  def translate(statuses)
+    if statuses.size == 0
       return
     end
-    google_token = 'ya29.El_OA6qOljjavTGd9Wy1yLt1xx6q6W1723rsfbslRz8orxK6o6H_U_N6k3Fgp2Mc5WuJakspxpt6PCUSQdJ9gtK7cUwVbg_IWrQujN4VFMKfncmYjz85cUMV4WjcJKEFIQ'
-    url_text = 'https://translation.googleapis.com/language/translate/v2?'
-    statuses.each do |status|
+    new_statuses = []
+    begin
+      statuses.each do |status|
         status.gsub!('#', '@@ ')
-        url_text += ('q='+ status +'&')
+      end
+      translate = Google::Apis::TranslateV2::TranslateService.new
+      translate.key = 'AIzaSyBPybPM5byd90J2ElL9V12JNhHwey3oyQI'
+      result = translate.list_translations(statuses, 'en', source: 'sq')
+      # puts result.translations.first.translated_text
+      new_statuses = []
+      result.translations.each do |translation|
+        translation.translated_text.gsub!('@@ ', '#')
+        new_statuses.push translation.translated_text
+      end
+    rescue => ex
+      return statuses
     end
-    url = URI.parse(url_text)
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
-    headers = {
-        'Content-Type' => 'application/json',
-        'Authorization' => 'Bearer ' + google_token
-    }
-    data = {
-        source: 'sq',
-        target: 'en',
-        format: 'text'
-    }
-    path = url.path + '?' + url.query
-    response = JSON.parse(http.post(path, data.to_json, headers).body)
-    statuses = []
-    response['data']['translations'].each do |translation|
-      translation['translatedText'].gsub!('@@ ', '#')
-      statuses.push translation['translatedText']
-    end
-    statuses
+    new_statuses
   end
 
   def posts_with_sentiment
@@ -94,7 +83,7 @@ class Facebook < ApplicationRecord
       documents = posts.values.map { |i| { language: 'en', id: i['id'], text: i['message'] } }
 
       texts = posts.values.map { |i| i['message'] }
-      texts = translate_statuses texts
+      texts = translate texts
       documents.each_with_index { |doc, i| doc['text'] = texts[i] }
 
       data = {
@@ -149,6 +138,18 @@ class Facebook < ApplicationRecord
     end
   end
 
+  def links_per_post
+    self[:links_per_post] ||= begin
+      sum = 0
+
+      posts_with_message.each do |post|
+        sum += post['links_count']
+      end
+
+      sum / posts_with_message.length.to_f
+    end
+  end
+
   def personal_info
     @personal_info ||= begin
       personal_info = {}
@@ -187,7 +188,7 @@ class Facebook < ApplicationRecord
   end
 
   def activities_length
-      self[:activities_length] ||= personal_info[:activities_length]
+      self[:activities_length] ||= user_events
   end
 
   def favorites_count
@@ -196,6 +197,17 @@ class Facebook < ApplicationRecord
 
   def fb_id
     self[:fb_id] ||= personal_info[:fb_id]
+  end
+
+  private
+  def user_events
+    events_count = 0
+    begin
+      result = graph_api.get_object('me/events')
+      events_count = result.size
+    rescue => ex
+    end
+    events_count
   end
 
 end

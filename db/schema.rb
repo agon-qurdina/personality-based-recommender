@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170108215419) do
+ActiveRecord::Schema.define(version: 20170110225110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,9 @@ ActiveRecord::Schema.define(version: 20170108215419) do
     t.integer  "last_name_length"
     t.integer  "activities_length"
     t.integer  "favorites_count"
+    t.decimal  "links_per_post"
+    t.decimal  "hashtags_per_post"
+    t.decimal  "words_per_post"
     t.index ["user_id"], name: "index_facebooks_on_user_id", using: :btree
   end
 
