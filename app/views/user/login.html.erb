@@ -1,21 +1,70 @@
-<h1>User#login</h1>
+<p id="user-fb-name" style="display: none;"><%= session[:user_fb_name].nil? ? '' : ('Mire se erdhe, ' + session[:user_fb_name]) %></p>
+<p><a id="btn-login" onclick="return login();" href="#" style="display: none;">Log In</a></p>
+<p><a id="btn-logout" onclick="return logout();" href="#" style="display: none;">Log Out</a></p>
+<br/>
+<p><a id="get-user-info" href="#" style="display: none;">Get User Info</a></p>
+<p><a id="get-user-friends" href="#" style="display: none;">Get User Friends</a></p>
 
-<p id="status"></p>
+<div id="loader" style="display: none;"></div>
 
-<p><a id="btn-login" onclick="return login();" href="">Log In</a></p>
-<p><a id="btn-logout" onclick="return logout();" href="">Log Out</a></p>
-<!--<p><a id="btn-check-status" onclick="return get_status();" href="">Check Status</a></p>-->
-<p><a id="get-user-info" href="">Get User Info</a></p>
-<p><a id="get-user-friends" href="">Get User Friends</a></p>
+<div style="display:none;margin-top: 20px;" id="mesazhi" class="animate-bottom">
+  <h2 style="color: green;">Sukses!</h2>
+  <p>Te dhenat e juaja u morren me sukses!</p>
+</div>
 
-<!--<div-->
-<!--class="fb-like"-->
-<!--data-share="true"-->
-<!--data-width="450"-->
-<!--data-show-faces="true">-->
-<!--</div>-->
+<style>
+  #loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
 
-<!--<div id="fb-root"></div>-->
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Add animation to "page content" */
+  .animate-bottom {
+    position: relative;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 1s;
+    animation-name: animatebottom;
+    animation-duration: 1s
+  }
+
+  @-webkit-keyframes animatebottom {
+    from { bottom:-100px; opacity:0 }
+    to { bottom:0px; opacity:1 }
+  }
+
+  @keyframes animatebottom {
+    from{ bottom:-100px; opacity:0 }
+    to{ bottom:0; opacity:1 }
+  }
+
+  #myDiv {
+    display: none;
+    text-align: center;
+  }
+</style>
+
 
 <script>
     window.fbAsyncInit = function() {
@@ -37,9 +86,13 @@
     }(document, 'script', 'facebook-jssdk'));
 
     $('#get-user-info').on('click', function () {
+        $('#mesazhi').hide();
+        $('#loader').show();
         $.ajax({
             url: 'user_info',
             success: function (data) {
+                $('#loader').hide();
+                $('#mesazhi').show();
                 console.log('User info:', data);
             },
             error: function (err1, err2) {
@@ -50,9 +103,13 @@
     });
 
     $('#get-user-friends').on('click', function () {
+        $('#mesazhi').hide();
+        $('#loader').show();
         $.ajax({
             url: 'user_friends',
             success: function (data) {
+                $('#loader').hide();
+                $('#mesazhi').show();
                 console.log('User friends:', data);
             },
             error: function (err1, err2) {
@@ -66,11 +123,12 @@
         FB.login(function(response) {
             console.log(response);
             if (response.status === 'connected') {
-                alert('Logged in!');
+                alert('Logged in successfully!');
                 $.ajax({
                     url: 'login_callback',
                     data: {token: response.authResponse.accessToken},
                     success: function(data){
+                        $('#user-fb-name').text('Mire se erdhe, ' + data.name);
                         get_status();
                     },
                     error: function (err1, err2) {
@@ -124,6 +182,7 @@
             $.ajax({
                 url: 'logout_callback',
                 success: function(data){
+                    $('#user-fb-name').text('');
                     get_status();
                 },
                 error: function (err1, err2) {
@@ -136,17 +195,26 @@
     
     function get_status() {
         FB.getLoginStatus(function(response) {
-            console.log(response);
-            $('#status').text(response.status);
-            $.ajax({
-                url: 'get_token',
-                success: function(data){
-                    console.log(data);
-                },
-                error: function (err1, err2) {
-                    alert(JSON.stringify(err1) + '\n' + JSON.stringify(err2));
-                }
-            });
+            var $btn_login = $('#btn-login');
+            var $btn_logout = $('#btn-logout');
+            var $user_info = $('#get-user-info');
+            var $user_friends = $('#get-user-friends');
+            var $user_fb_name = $('#user-fb-name');
+            if(response.status == 'connected'){
+                $btn_login.hide();
+                $btn_logout.show();
+                $user_info.show();
+                $user_friends.show();
+                $user_fb_name.show();
+            } else {
+                $btn_login.show();
+                $btn_logout.hide();
+                $user_info.hide();
+                $user_friends.hide();
+                $user_fb_name.text('');
+                $user_fb_name.hide();
+            }
+            console.log('status: ', response.status);
         });
         return false;
     }
