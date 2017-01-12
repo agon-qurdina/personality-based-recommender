@@ -89,7 +89,7 @@
         $('#mesazhi').hide();
         $('#loader').show();
         $.ajax({
-            url: 'user_info',
+            url: 'user/user_info',
             success: function (data) {
                 $('#loader').hide();
                 $('#mesazhi').show();
@@ -106,7 +106,7 @@
         $('#mesazhi').hide();
         $('#loader').show();
         $.ajax({
-            url: 'user_friends',
+            url: 'user/user_friends',
             success: function (data) {
                 $('#loader').hide();
                 $('#mesazhi').show();
@@ -125,7 +125,7 @@
             if (response.status === 'connected') {
                 alert('Logged in successfully!');
                 $.ajax({
-                    url: 'login_callback',
+                    url: 'user/login_callback',
                     data: {token: response.authResponse.accessToken},
                     success: function(data){
                         $('#user-fb-name').text('Mire se erdhe, ' + data.name);
@@ -180,7 +180,7 @@
             // Person is now logged out
             alert('logged out');
             $.ajax({
-                url: 'logout_callback',
+                url: 'user/logout_callback',
                 success: function(data){
                     $('#user-fb-name').text('');
                     get_status();

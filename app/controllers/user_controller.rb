@@ -1,7 +1,4 @@
 class UserController < ApplicationController
-  def index
-  end
-
   def login
   end
 
@@ -14,14 +11,6 @@ class UserController < ApplicationController
     session[:user_fb_name] = name
     # @fb = FbStat.new
     render json: { token: token, name: name }
-  end
-
-  def get_token
-    token = ''
-    unless session[:user_fb_token].nil?
-      token = session[:user_fb_token]
-    end
-    render json: { token: token }
   end
 
   def logout_callback
