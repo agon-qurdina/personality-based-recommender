@@ -12,4 +12,6 @@ Rails.application.routes.draw do
   get 'user/logout_callback', to: 'user#logout_callback'
   get 'user/user_info', to: 'user#user_info'
   get 'user/user_friends', to: 'user#user_friends'
+
+  get 'calculate_personality', to: 'user#calculate'
 end

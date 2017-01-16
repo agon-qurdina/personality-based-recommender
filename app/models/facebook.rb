@@ -184,15 +184,24 @@ class Facebook < ApplicationRecord
   end
 
   def relationship_status
-    self[:relationship_status] ||= personal_info[:relationship_status]
+    if self[:relationship_status].nil?
+      self[:relationship_status] = personal_info[:relationship_status]
+    end
+    self[:relationship_status]
   end
 
   def activities_length
-      self[:activities_length] ||= user_events
+      if self[:activities_length].nil?
+        self[:activities_length] = personal_info[:activities_length]
+      end
+      self[:activities_length]
   end
 
   def favorites_count
-    self[:favorites_count] ||= personal_info[:favorites_count]
+    if self[:favorites_count].nil?
+      self[:favorites_count] = personal_info[:favorites_count]
+    end
+    self[:favorites_count]
   end
 
   def fb_id
