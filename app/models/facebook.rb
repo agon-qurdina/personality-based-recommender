@@ -79,21 +79,22 @@ class Facebook < ApplicationRecord
 
       posts = {}
       posts_with_message.each { |i| posts[i['id']] = i }
+      if posts.size > 0
+        documents = posts.values.map { |i| { language: 'en', id: i['id'], text: i['message'] } }
 
-      documents = posts.values.map { |i| { language: 'en', id: i['id'], text: i['message'] } }
+        texts = posts.values.map { |i| i['message'] }
+        texts = translate texts
+        documents.each_with_index { |doc, i| doc['text'] = texts[i] }
 
-      texts = posts.values.map { |i| i['message'] }
-      texts = translate texts
-      documents.each_with_index { |doc, i| doc['text'] = texts[i] }
+        data = {
+            documents: documents
+        }
 
-      data = {
-          documents: documents
-      }
+        response = JSON.parse(http.post(url.path, data.to_json, headers).body)
 
-      response = JSON.parse(http.post(url.path, data.to_json, headers).body)
-
-      response['documents'].each do |document|
-        posts[document['id']]['sentiment'] = document['score']
+        response['documents'].each do |document|
+          posts[document['id']]['sentiment'] = document['score']
+        end
       end
 
       posts
@@ -106,16 +107,27 @@ class Facebook < ApplicationRecord
 
       posts = posts_with_sentiment.values
 
+      if posts.size == 0
+        return 0.0
+      end
+
       posts.each do |post|
         sum += post['sentiment']
       end
 
-      sum / posts.length.to_f
+      avg = sum / posts.length.to_f
+      if avg.to_f.nan?
+        avg = 0.0
+      end
+      avg
     end
   end
 
   def words_per_post
     self[:words_per_post] ||= begin
+      if posts_with_message.length == 0
+        return 0
+      end
       sum = 0
 
       posts_with_message.each do |post|
@@ -128,6 +140,9 @@ class Facebook < ApplicationRecord
 
   def hashtags_per_post
     self[:hashtags_per_post] ||= begin
+      if posts_with_message.length == 0
+        return 0
+      end
       sum = 0
 
       posts_with_message.each do |post|
@@ -140,6 +155,9 @@ class Facebook < ApplicationRecord
 
   def links_per_post
     self[:links_per_post] ||= begin
+      if posts_with_message.length == 0
+        return 0
+      end
       sum = 0
 
       posts_with_message.each do |post|
@@ -206,6 +224,60 @@ class Facebook < ApplicationRecord
 
   def fb_id
     self[:fb_id] ||= personal_info[:fb_id]
+  end
+
+  def self.get_extremes
+    extremes = {}
+
+    extremes[:friends_count] = {}
+    extremes[:friends_count][:min] = 0
+    extremes[:friends_count][:max] = Facebook.maximum(:friends_count)
+    if extremes[:friends_count][:min] == extremes[:friends_count][:max]
+      extremes[:friends_count][:max] = 1
+    end
+
+    extremes[:last_name_length] = {}
+    extremes[:last_name_length][:min] = 0
+    extremes[:last_name_length][:max] = Facebook.maximum(:last_name_length)
+    if extremes[:last_name_length][:min] == extremes[:last_name_length][:max]
+      extremes[:last_name_length][:max] = 1
+    end
+
+    extremes[:activities_length] = {}
+    extremes[:activities_length][:min] = 0
+    extremes[:activities_length][:max] = Facebook.maximum(:activities_length)
+    if extremes[:activities_length][:min] == extremes[:activities_length][:max]
+      extremes[:activities_length][:max] = 1
+    end
+
+    extremes[:favorites_count] = {}
+    extremes[:favorites_count][:min] = 0
+    extremes[:favorites_count][:max] = Facebook.maximum(:favorites_count)
+    if extremes[:favorites_count][:min] == extremes[:friends_count][:max]
+      extremes[:favorites_count][:max] = 1
+    end
+
+    extremes[:links_per_post] = {}
+    extremes[:links_per_post][:min] = 0
+    extremes[:links_per_post][:max] = Facebook.maximum(:links_per_post)
+    if extremes[:links_per_post][:min] == extremes[:links_per_post][:max]
+      extremes[:links_per_post][:max] = 1
+    end
+
+    extremes[:hashtags_per_post] = {}
+    extremes[:hashtags_per_post][:min] = 0
+    extremes[:hashtags_per_post][:max] = Facebook.maximum(:hashtags_per_post)
+    if extremes[:hashtags_per_post][:min] == extremes[:hashtags_per_post][:max]
+      extremes[:hashtags_per_post][:max] = 1
+    end
+
+    extremes[:words_per_post] = {}
+    extremes[:words_per_post][:min] = 0
+    extremes[:words_per_post][:max] = Facebook.maximum(:words_per_post)
+    if extremes[:words_per_post][:min] == extremes[:words_per_post][:max]
+      extremes[:words_per_post][:max] = 1
+    end
+    extremes
   end
 
   private

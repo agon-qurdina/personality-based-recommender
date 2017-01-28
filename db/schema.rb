@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170110225110) do
+ActiveRecord::Schema.define(version: 20170128224754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 20170110225110) do
     t.decimal  "links_per_post"
     t.decimal  "hashtags_per_post"
     t.decimal  "words_per_post"
+    t.text     "first_name"
+    t.text     "last_name"
     t.index ["user_id"], name: "index_facebooks_on_user_id", using: :btree
   end
 
@@ -43,7 +45,34 @@ ActiveRecord::Schema.define(version: 20170110225110) do
     t.decimal  "openness"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.text     "fb_id"
+    t.text     "first_name"
+    t.text     "last_name"
     t.index ["user_id"], name: "index_personalities_on_user_id", using: :btree
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string   "title"
+    t.string   "description"
+    t.decimal  "price"
+    t.decimal  "avg_extraversion"
+    t.decimal  "avg_agreeableness"
+    t.decimal  "avg_conscientiousness"
+    t.decimal  "avg_neuroticism"
+    t.decimal  "avg_openness"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  create_table "purchases", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "product_id"
+    t.string   "quantity"
+    t.string   "price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_purchases_on_product_id", using: :btree
+    t.index ["user_id"], name: "index_purchases_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|

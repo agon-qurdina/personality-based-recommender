@@ -3,7 +3,10 @@
 <p><a id="btn-logout" onclick="return logout();" href="#" style="display: none;">Log Out</a></p>
 <br/>
 <p><a id="get-user-info" href="#" style="display: none;">Get User Info</a></p>
-<p><a id="get-user-friends" href="#" style="display: none;">Get User Friends</a></p>
+<p><a id="calculate-personality" href="#" style="display: none;">Calculate personality</a></p>
+<!--<p><a id="get-user-friends" href="#" style="display: none;">Get User Friends</a></p>-->
+
+<input id="fb_id" type="hidden" value="" />
 
 <div id="loader" style="display: none;"></div>
 
@@ -94,8 +97,24 @@
                 $('#loader').hide();
                 $('#mesazhi').show();
                 console.log('User info:', data);
+                $('#fb_id').val(data.fb_id);
+                $('#calculate-personality').show();
             },
             error: function (err1, err2) {
+                console.log('Error: \n' + JSON.stringify(err1) + '\n' + JSON.stringify(err2));
+            }
+        });
+        return false;
+    });
+
+    $('#calculate-personality').on('click', function(){
+        $.ajax({
+            url: 'calculate_personality',
+            data: {fb_id: $('#fb_id').val()},
+            success: function (data) {
+              $('#mesazhi p').text(JSON.stringify(data));
+            },
+            error: function(err1, err2){
                 console.log('Error: \n' + JSON.stringify(err1) + '\n' + JSON.stringify(err2));
             }
         });

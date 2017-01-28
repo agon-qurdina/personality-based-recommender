@@ -2,9 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def test
+    extremes = Facebook.get_extremes
 
-    facebook = Facebook.first
-
-    render json: facebook.personal_info #.posts_with_message
+    render json: extremes
   end
 end
