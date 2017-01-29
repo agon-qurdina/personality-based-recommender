@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :products
   root to: 'user#login'
 
   get 'user/login'
@@ -14,4 +15,6 @@ Rails.application.routes.draw do
   get 'user/user_friends', to: 'user#user_friends'
 
   get 'calculate_personality', to: 'user#calculate'
+
+
 end

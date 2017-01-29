@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170128224754) do
+ActiveRecord::Schema.define(version: 20170129101710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,14 +54,15 @@ ActiveRecord::Schema.define(version: 20170128224754) do
   create_table "products", force: :cascade do |t|
     t.string   "title"
     t.string   "description"
-    t.decimal  "price"
-    t.decimal  "avg_extraversion"
-    t.decimal  "avg_agreeableness"
-    t.decimal  "avg_conscientiousness"
-    t.decimal  "avg_neuroticism"
-    t.decimal  "avg_openness"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.string   "code"
+    t.string   "image"
+    t.decimal  "extraversion"
+    t.decimal  "agreeableness"
+    t.decimal  "conscientiousness"
+    t.decimal  "nueroticism"
+    t.decimal  "openness"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "purchases", force: :cascade do |t|
