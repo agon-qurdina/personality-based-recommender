@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
-  resources :products
-  root to: 'user#login'
+  root to: 'products#index'
+
+  resources :products do
+    collection do
+      post 'purchase'
+    end
+  end
 
   get 'user/login'
 
@@ -11,10 +16,10 @@ Rails.application.routes.draw do
 
   get 'user/login_callback', to: 'user#login_callback'
   get 'user/logout_callback', to: 'user#logout_callback'
-  get 'user/user_info', to: 'user#user_info'
-  get 'user/user_friends', to: 'user#user_friends'
+  get 'get_fb_info', to: 'user#get_fb_info'
+  get 'personality', to: 'user#personality'
 
-  get 'calculate_personality', to: 'user#calculate'
+  get 'calculate', to: 'user#calculate'
 
 
 end
