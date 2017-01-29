@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:purchase]
+  before_action :authenticate_user!, only: [:purchase, :index]
 
   def home
   end
@@ -8,13 +8,13 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    @products = Product.all.limit(10).to_a
+    @products = Product.with_distance_from(current_user.personality_hash).order('distance').limit(10).to_a
   end
 
   # GET /products/1
   # GET /products/1.json
   def show
-    @similar_products = @product.get_closest_products
+    @similar_products = Product.with_distance_from(@product.avg_personality).where('id != ?',@product.id).order('distance').first(5)
   end
 
   # GET /products/new
