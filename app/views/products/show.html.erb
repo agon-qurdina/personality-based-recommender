@@ -1,5 +1,7 @@
 <p id="notice"><%= notice %></p>
 
+<input type="hidden" id="product_id" value="<%= @product.id %>" />
+
 <p>
   <strong>Title:</strong>
   <%= @product.title %>
@@ -22,3 +24,55 @@
 
 <%= link_to 'Edit', edit_product_path(@product) %> |
 <%= link_to 'Back', products_path %>
+
+<button id="btn-purchase">Purchase Product</button>
+
+<br />
+
+<h3>Similar Products</h3>
+<table border="1">
+  <tr>
+<%
+  @similar_products.each do |product|
+%>
+  <td>
+    <a href="/products/<%= product.id %>">
+      <img src="<%= image_url(product.image) %>" />
+      <span><%= product.title %></span>
+    </a>
+  </td>
+<%
+  end
+%>
+  </tr>
+</table>
+
+<style>
+  .similar-products{
+    display: inline;
+    margin-right: 30px;
+    border: 1px solid black;
+  }
+</style>
+
+<script>
+  $('#btn-purchase').on('click', function(){
+      if(confirm('Are you sure you want to purchase this product?')) {
+          $.ajax({
+              url: 'purchase',
+              data: { product_id: $('#product_id').val() },
+              method: 'post',
+              success: function (data) {
+                  if(data.success){
+                      $('#notice').text('Product was successfully purchased').show();
+                  } else {
+                      $('#notice').text(data.error).show();
+                  }
+              },
+              error: function(err1, err2){
+                  console.log('Error: \n' + JSON.stringify(err1) + '\n' + JSON.stringify(err2));
+              }
+          });
+      }
+  });
+</script>

@@ -1,5 +1,9 @@
 class UserController < ApplicationController
+  before_action :authenticate_user!, only: [:personality, :get_fb_info, :calculate]
   def login
+  end
+
+  def personality
   end
 
   def login_callback
@@ -19,17 +23,19 @@ class UserController < ApplicationController
     render json: { }
   end
 
-  def user_info
+  def get_fb_info
     oauth_access_token = session[:user_fb_token]
     facebook = Facebook.new
     facebook.access_token=oauth_access_token
 
-    Facebook.destroy_all({fb_id: facebook.fb_id})
+    Facebook.destroy_all({user_id: current_user.id})
 
     # if Facebook.exists?({fb_id: facebook.fb_id})
     #   old_facebook = Facebook.where({fb_id: facebook.fb_id}).first
     #   facebook = old_facebook
     # end
+    facebook.user_id=current_user.id
+    facebook.fb_id
     facebook.avg_posts_sentiment
     facebook.friends_count
     facebook.hashtags_per_post
@@ -43,19 +49,20 @@ class UserController < ApplicationController
     render json: facebook
   end
 
-  def user_friends
-    oauth_access_token = session[:user_fb_token]
-    @graph = Koala::Facebook::API.new(oauth_access_token)
-    profile = @graph.get_object('/me/taggable_friends', { limit: 1000 })
-    render json: profile
-  end
+  # def user_friends
+  #   oauth_access_token = session[:user_fb_token]
+  #   @graph = Koala::Facebook::API.new(oauth_access_token)
+  #   profile = @graph.get_object('/me/taggable_friends', { limit: 1000 })
+  #   render json: profile
+  # end
 
   def calculate
     facebook = nil
+
     if params[:fb_id].nil?
       facebook = Facebook.first!
     else
-      facebook = Facebook.where({fb_id: params[:fb_id]}).first
+      facebook = Facebook.where({fb_id: params[:fb_id]}).last
     end
     openness = []
     conscientiousness = []
@@ -63,6 +70,7 @@ class UserController < ApplicationController
     agreeableness = []
     neuroticism = []
     personality = Personality.new
+    personality.user_id=facebook.user_id
     personality.fb_id = facebook.fb_id
 
     extremes = Facebook.get_extremes

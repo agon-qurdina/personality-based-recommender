@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:purchase]
 
   # GET /products
   # GET /products.json
@@ -10,6 +11,7 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+    @similar_products = @product.get_closest_products
   end
 
   # GET /products/new
@@ -32,7 +34,7 @@ class ProductsController < ApplicationController
     @product.openness=0.0
     respond_to do |format|
       if @product.save
-        format.html { redirect_to @product, notice: 'Product was successfully created.' }
+        format.html { redirect_to action: :index, notice: 'Product was successfully created.' }
         format.json { render :show, status: :created, location: @product }
       else
         format.html { render :new }
@@ -63,6 +65,27 @@ class ProductsController < ApplicationController
       format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def purchase
+    product = Product.find(params[:product_id])
+
+    purchase = Purchase.new
+    purchase.user_id = current_user.id
+    purchase.product_id = product.id
+    purchase.quantity = 1
+    purchase.price = 0.0
+    purchase.save!
+
+    avg_personality = Purchase.get_avg_personality product.id
+    product.agreeableness=avg_personality[:agreeableness]
+    product.conscientiousness=avg_personality[:conscientiousness]
+    product.neuroticism=avg_personality[:neuroticism]
+    product.extraversion=avg_personality[:extraversion]
+    product.openness=avg_personality[:openness]
+    product.save!
+
+    render json: { success: true }
   end
 
   private
