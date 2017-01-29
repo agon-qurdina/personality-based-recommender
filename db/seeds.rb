@@ -6,6 +6,22 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+start = Time.now
+
+Product.first(5000).each_with_index do |product, i|
+  avg_personality = Purchase.get_avg_personality product.id
+  product.agreeableness=avg_personality[:agreeableness]
+  product.conscientiousness=avg_personality[:conscientiousness]
+  product.neuroticism=avg_personality[:neuroticism]
+  product.extraversion=avg_personality[:extraversion]
+  product.openness=avg_personality[:openness]
+  product.save!
+  puts i
+end
+elaspsed = Time.now - start
+puts elaspsed.to_s + ' seconds'
+return
+
 300.times do
   User.create!({ email: Faker::Internet.email, password: Devise.friendly_token.first(8) })
 end

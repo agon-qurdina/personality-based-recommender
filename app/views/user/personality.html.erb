@@ -226,10 +226,11 @@
             if(response.status == 'connected'){
                 $btn_login.hide();
                 $btn_logout.show();
-                $('#user-fb-name').text('Jeni i loguar');
+                FB.api('/me?fields=name', function(response) {
+                    $user_fb_name.text('Mire se erdhe, ' + response.name).show();
+                });
                 $user_info.show();
                 $user_friends.show();
-                $user_fb_name.show();
             } else {
                 $btn_login.show();
                 $btn_logout.hide();

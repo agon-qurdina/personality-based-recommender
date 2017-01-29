@@ -31,7 +31,9 @@ class Product < ApplicationRecord
   def get_closest_products
     products = Product.where('id != ?',self[:id]).to_a
     product_distances = {}
-    products.each { |product| product_distances[product.id] = Personality.eucledian_distance self,product }
+    products.each do |product|
+      product_distances[product.id] = Personality.eucledian_distance self,product
+    end
     product_distances = product_distances.sort_by { |k,v| v }.first(5).to_h
     keys = product_distances.keys
     final_products = []
