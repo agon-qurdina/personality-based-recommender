@@ -1,27 +1,153 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>PersonalityRecomandation</title>
-    <%= csrf_meta_tags %>
+    <title>e-commerce</title>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+
+    <!--from template-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <%= stylesheet_link_tag '/css/style', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= yield :styles %>
+
+    <%= javascript_include_tag '/js/modernizr', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag '/js/jquery.min', 'data-turbolinks-track': 'reload' %>
+
+    <%= yield :scripts %>
+
+    <script>window.jQuery || document.write('<script src="/js/libs/jquery-1.7.min.js">\x3C/script>')</script>
+
+    <%= javascript_include_tag '/js/jquery.flexslider', 'data-turbolinks-track': 'reload' %>
+    <script type="text/javascript">
+        $(function(){
+            SyntaxHighlighter.all();
+        });
+        $(window).load(function(){
+            $('.flexslider').flexslider({
+                animation: "slide",
+                start: function(slider){
+                    $('body').removeClass('loading');
+                }
+            });
+        });
+    </script>
+    <!--end-->
   </head>
 
   <body>
-  <p class="navbar-text pull-right">
-    <% if user_signed_in? %>
-        Logged in as <strong><%= current_user.email %></strong>.
-        <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
-        <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
 
-        <br/>
-        <%= link_to 'Home', 'products' %>
-        <%= link_to 'Calculate Personality', 'personality' %>
-    <% else %>
-        <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
-        <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
-    <% end %>
-    <%= yield %>
+  <div class="wrap">
+    <div class="header">
+      <div class="logo">
+        <a href="index.html"><img src="/images/logo.png" alt=""  title="logo"/></a>
+      </div>
+      <div class="nav-right">
+        <ul class="nav">
+          <li>
+            <% if user_signed_in? %>
+                Logged in as <strong><%= current_user.email %></strong>.
+                <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
+                <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+
+                <br/>
+                <%= link_to 'Calculate Personality', 'personality' %>
+            <% else %>
+                <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+                <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+      <div class="clear"></div>
+    </div>
+    <div class="menu-bg">
+      <ul class="menu">
+        <li class="active"><%= link_to 'Home', 'products/home' %></li>
+        <li class="active"><%= link_to 'Products', 'products' %></li>
+        <li><a href="#">Categories</a>
+          <ul>
+            <li><a href="#" >Tablet</a></li>
+            <li><a href="#">Camera</a></li>
+            <li><a href="#">Peripherals</a></li>
+          </ul>
+        </li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="search">
+        <form>
+          <input type="text" value="">
+          <input type="submit" value="">
+        </form>
+      </div>
+      <div class="clear"></div>
+    </div>
+    <div class="flexslider" style="display:none;">
+      <div class="flex-viewport" style="overflow: hidden; position: relative;">
+        <ul class="slides" style="width: 100%; -webkit-transition: 0.6s; transition: 0.6s; -webkit-transform: translate3d(-5032px, 0, 0);">
+          <li class="clone" style="width: 100%; float: left; display: block;">
+            <img src="/images/slider1.jpg" alt=""/>
+          </li>
+          <li style="width: 100%; float: left; display: block;" class="">
+            <img src="/images/slider2.jpg" alt=""/>
+          </li>
+          <li class="" style="width:100%; float: left; display: block;">
+            <img src="/images/slider3.jpg" alt=""/>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
+      <%= yield %>
+    </div>
+
+    <div class="footer">
+      <div class="section group">
+        <div class="col_1_of_4 span_1_of_4">
+          <h2>My Account</h2>
+          <ul class="nav1">
+            <li><a href="">Always free from repetition</a></li>
+            <li><a href="">Morbi blandit turpis ewuhre</a></li>
+            <li><a href="">Integer id ante nec elit mo</a></li>
+            <li><a href="">Maecenas accumsan lorem sed</a></li>
+          </ul>
+        </div>
+        <div class="col_1_of_4 span_1_of_4">
+          <h2>Information</h2>
+          <ul class="nav1">
+            <li><a href="">Always free from repetition</a></li>
+            <li><a href="">Morbi blandit turpis ewuhre</a></li>
+            <li><a href="">Integer id ante nec elit mo</a></li>
+            <li><a href="">Maecenas accumsan lorem sed</a></li>
+          </ul>
+        </div>
+        <div class="col_1_of_4 span_1_of_4">
+          <h2>Follow Us</h2>
+          <ul class="nav">
+            <li><a href=""><img src="/images/facebook.png" title="facebook" alt=""/></a></li>
+            <li><a href=""><img src="/images/twitter.png" title="twitter" alt=""/></a></li>
+            <li><a href=""><img src="/images/rss.png" title="rss" alt=""/></a></li>
+          </ul>
+        </div>
+        <div class="col_1_of_4 span_1_of_4">
+          <h2>Contact Us</h2>
+          <ul class="nav">
+            <li><a href=""> 500 Lorem Ipsum Dolor Sit,</a></li>
+            <li><a href="">22-56-2-9 Sit Amet, Lorem,</a></li>
+            <li><a href="">USA </a></li>
+            <li><a href="">Phone:(00) 222 666 444 </a></li>
+            <li><a href=""> Email: <span>info@mycompany.com</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer1">
+      <p class="w3-link">© All Rights Reserved | Designed by&nbsp; <a href="http://w3layouts.com/"> W3Layouts</a></p>
+    </div>
+  </div>
+
   </body>
 </html>

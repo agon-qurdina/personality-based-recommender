@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  root to: 'products#index'
+  root to: 'products#home'
+
+  get '/products/home', to: 'products#home'
 
   resources :products do
     collection do

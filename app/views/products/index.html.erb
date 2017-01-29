@@ -1,33 +1,127 @@
-<p id="notice"><%= notice %></p>
+<% content_for :styles do %>
+    <%= stylesheet_link_tag '/css/lightbox', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
 
-<h1>Products</h1>
+<% content_for :scripts do %>
+    <%= javascript_include_tag '/js/jquery.lightbox', 'data-turbolinks-track': 'reload' %>
+    <script type="text/javascript">
+        $(function() {
+            $('.grid-img a').lightBox();
+        });
+    </script>
+    <%= javascript_include_tag '/js/jquery-slider', 'data-turbolinks-track': 'reload' %>
+<% end %>
 
-<table border="1" cellpadding="1" cellspacing="1">
-  <thead>
-    <tr>
-      <th>Image</th>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Code</th>
-      <th colspan="3">Actions</th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% @products.each do |product| %>
-      <tr>
-        <td><img alt="Product image" src="<%= product.image %>" /> </td>
-        <td><%= product.title %></td>
-        <td><%= product.description %></td>
-        <td><%= product.code %></td>
-        <td><%= link_to 'Show', product %></td>
-        <td><%= link_to 'Edit', edit_product_path(product) %></td>
-        <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Product', new_product_path %>
+<div class="section group">
+  <div class="cont span_2_of_3">
+    <div class="single">
+      <p id="notice"><%= notice %></p>
+      <h2><a href="index.html">Home&nbsp;></a></h2>
+      <div class="clear"></div>
+      <div class="text-h">
+        <p class="left">Computing</p>
+        <p class="right">There are 5000 Products.</p>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <div class="text-h1 top">
+      <h2>27 other products in the same category</h2>
+    </div>
+    <p class="left sort">Sort by:</p>
+    <div class="drp-dwn">
+      <select onchange="window.location=this.options[this.selectedIndex].value">
+        <option value="">-</option>
+        <option value="">eiusmod</option>
+        <option value="">eiusmod</option>
+        <option value="">eiusmod</option>
+        <option value="">eiusmod</option>
+      </select>
+    </div>
+    <div class="section group">
+      <% @products[0,5].each do |product| %>
+          <div class="col_1_of_5 span_1_of_5">
+            <div class="grid-img">
+              <a href="<%= product.image %>"><img src="<%= product.image %>" alt=""/></a>
+            </div>
+            <p><%= product.title %></p>
+            <button class="left">$<%= product.price.to_f.round(3) %></button>
+            <div class="btn right"><%= link_to 'View', product %></div>
+          </div>
+      <% end %>
+    </div>
+    <div class="section group">
+      <% @products[5,5].each do |product| %>
+          <div class="col_1_of_5 span_1_of_5">
+            <div class="grid-img">
+              <a href="<%= product.image %>"><img src="<%= product.image %>" alt=""/></a>
+            </div>
+            <p><%= product.title %></p>
+            <button class="left">$<%= product.price.to_f.round(3) %></button>
+            <div class="btn right"><%= link_to 'View', product %></div>
+          </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="rsidebar span_1_of_3">
+    <div class="sidebar">
+      <h2>Cart</h2>
+      <p class="left">No Products</p>
+      <button class="right">-</button>
+      <div class="clear"></div>
+      <p class="left">Shipping</p>
+      <button class="right">$32.58</button>
+      <div class="clear"></div>
+      <p class="left">Export</p>
+      <button class="right">$45.23</button>
+      <div class="clear"></div>
+      <p class="left">Import</p>
+      <button class="right">$23.58</button>
+      <div class="clear"></div>
+      <p class="left">Total</p>
+      <button class="right">$100.420</button>
+      <div class="clear"></div>
+      <div class="btn top"><a href="details.html">Add to Cart</a></div>
+    </div>
+    <div class="clear"></div>
+    <div class="sidebar">
+      <h2>Catogories</h2>
+      <ul class="nav1">
+        <li><a href="">Lorem ipsum dolor sit amet,Lorem Ipsum is simply dummy</a></li>
+        <li><a href="">Aliquam tincidunt mauris eu risus,Lorem Ipsum is simply</a></li>
+        <li><a href="">Vestibulum auctor dapibus neque,Lorem Ipsum is simply</a></li>
+        <li><a href="">Lorem ipsum dolor sit amet,,Lorem Ipsum is simply dummy</a></li>
+        <li><a href="">Aliquam tincidunt mauris eu risus,Lorem Ipsum is simply</a></li>
+        <li><a href="">Vestibulum auctor dapibus neque,Lorem Ipsum is simply</a></li>
+      </ul>
+    </div>
+    <div class="clear"></div>
+    <div class="sidebar">
+      <h2>Top Sellers</h2>
+      <div class="listview_1_of_2 images_1_of_2">
+        <div class="listimg listimg_2_of_1">
+          <a href="details.html"><img src="images/pic4.jpg" alt=""/></a>
+        </div>
+        <div class="text list_2_of_1">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt  ut labore</p>
+        </div>
+      </div>
+      <div class="listview_1_of_2 images_1_of_2">
+        <div class="listimg listimg_2_of_1">
+          <a href="details.html"><img src="images/pic5.jpg" alt=""/></a>
+        </div>
+        <div class="text list_2_of_1">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt  ut labore</p>
+        </div>
+      </div>
+      <div class="listview_1_of_2 images_1_of_2">
+        <div class="listimg listimg_2_of_1">
+          <a href="details.html"><img src="images/pic6.jpg" alt=""/></a>
+        </div>
+        <div class="text list_2_of_1">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt  ut labore</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
