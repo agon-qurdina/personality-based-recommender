@@ -22,13 +22,13 @@
   </div>
 
   <div class="field">
-    <%= f.label :product_code %>
+    <%= f.label :code %>
     <%= f.text_field :code %>
   </div>
 
   <div class="field">
-    <%= f.label :product_image %>
-    <%= f.text_field :image %>
+    <%= f.label :image %>
+    <%= f.text_field :image, value: image_url('default_product.png'), readonly: true %>
   </div>
 
   <div class="actions">

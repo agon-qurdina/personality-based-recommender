@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20170129101710) do
     t.decimal  "extraversion"
     t.decimal  "agreeableness"
     t.decimal  "conscientiousness"
-    t.decimal  "nueroticism"
+    t.decimal  "neuroticism"
     t.decimal  "openness"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false

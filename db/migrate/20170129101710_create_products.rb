@@ -9,7 +9,7 @@ class CreateProducts < ActiveRecord::Migration[5.0]
       t.decimal :extraversion
       t.decimal :agreeableness
       t.decimal :conscientiousness
-      t.decimal :nueroticism
+      t.decimal :neuroticism
       t.decimal :openness
 
       t.timestamps
