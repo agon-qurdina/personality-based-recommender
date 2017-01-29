@@ -34,6 +34,7 @@ gem 'passenger'
 gem 'devise'
 gem 'koala', '~> 2.2'
 gem 'roo'
+gem 'faker'
 
 
 group :development, :test do
