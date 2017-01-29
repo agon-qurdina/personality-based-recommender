@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170129101710) do
+ActiveRecord::Schema.define(version: 20170129154012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,13 +24,12 @@ ActiveRecord::Schema.define(version: 20170129101710) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.decimal  "avg_posts_sentiment"
+    t.decimal  "words_per_post"
+    t.decimal  "hashtags_per_post"
     t.boolean  "relationship_status"
     t.integer  "last_name_length"
-    t.integer  "activities_length"
+    t.integer  "activties_length"
     t.integer  "favorites_count"
-    t.decimal  "links_per_post"
-    t.decimal  "hashtags_per_post"
-    t.decimal  "words_per_post"
     t.text     "first_name"
     t.text     "last_name"
     t.index ["user_id"], name: "index_facebooks_on_user_id", using: :btree
@@ -63,6 +62,8 @@ ActiveRecord::Schema.define(version: 20170129101710) do
     t.decimal  "openness"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.decimal  "price"
+    t.string   "source_url"
   end
 
   create_table "purchases", force: :cascade do |t|

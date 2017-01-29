@@ -2,13 +2,15 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def test
-    personality1 = Personality.where({id: 28}).first
-    personality2 = Personality.where({id: 29}).first
-    personality3 = Personality.where({id: 30}).first
-    personality4 = Personality.where({id: 32}).first
-    personality5 = Personality.where({id: 33}).first
-    personality6 = Personality.where({id: 36}).first
-    personality7 = Personality.where({id: 37}).first
+
+
+    personality1 = Personality.where({ id: 28 }).first
+    personality2 = Personality.where({ id: 29 }).first
+    personality3 = Personality.where({ id: 30 }).first
+    personality4 = Personality.where({ id: 32 }).first
+    personality5 = Personality.where({ id: 33 }).first
+    personality6 = Personality.where({ id: 36 }).first
+    personality7 = Personality.where({ id: 37 }).first
 
     distances = []
     distances.push Product.new.eucledian_distance(personality1, personality2)
