@@ -3,7 +3,12 @@ class ApplicationController < ActionController::Base
 
   def test
     # Product.import
-    return render json:  #Faker::Number.decimal(0, 3).to_f
+
+
+    return render text: Product.update_personalities!
+
+    return render json: Product.with_distance_from(Product.first.avg_personality)
+                            .order(:distance).select('id,distance').to_sql
 
     personality1 = Personality.where({ id: 28 }).first
     personality2 = Personality.where({ id: 29 }).first
