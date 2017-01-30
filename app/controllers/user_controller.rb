@@ -67,8 +67,8 @@ class UserController < ApplicationController
   def calculate
     facebook = nil
 
-    if params[:fb_id].nil?
-      facebook = Facebook.where({user_id: current_user.id}).first
+    if params[:fb_id].nil? or params[:fb_id].empty?
+      facebook = Facebook.where({user_id: current_user.id}).last
     else
       facebook = Facebook.where({fb_id: params[:fb_id]}).last
     end
