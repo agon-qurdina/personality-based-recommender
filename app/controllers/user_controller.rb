@@ -68,9 +68,12 @@ class UserController < ApplicationController
     facebook = nil
 
     if params[:fb_id].nil?
-      facebook = Facebook.first!
+      facebook = Facebook.where({user_id: current_user.id}).first
     else
       facebook = Facebook.where({fb_id: params[:fb_id]}).last
+    end
+    if facebook.nil?
+      return render json: 'No Facebook accounts registered for user!'
     end
     openness = []
     conscientiousness = []
