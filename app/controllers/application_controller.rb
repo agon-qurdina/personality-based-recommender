@@ -8,14 +8,12 @@ class ApplicationController < ActionController::Base
     # Product.update_personalities!
 
     # Order products by personality usage
-    Product.with_distance_from(Product.first.avg_personality).order('distance desc').first(5)
+    # products = Product.with_distance_from(Product.first.avg_personality).to_a
 
-    Product.with_distance_from(User.first.personality_hash)
+    # Product.with_distance_from(User.first.personality_hash)
 
+    @products = Product.with_distance_from(current_user.personality_hash).order('distance').select('id,extraversion,agreeableness,conscientiousness,neuroticism,openness,distance').limit(5).to_a
 
-
-    return render text: 'done'
-
-    render json: { distances: distances }
+    render json: { user: current_user.personality_hash, products_to_user: @products }
   end
 end
