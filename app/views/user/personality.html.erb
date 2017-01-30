@@ -120,6 +120,7 @@
             url: 'calculate',
             data: {fb_id: $('#fb_id').val()},
             success: function (data) {
+                $('#mesazhi').show();
                 $('#mesazhi p').text(JSON.stringify(data)).show();
             },
             error: function(err1, err2){
