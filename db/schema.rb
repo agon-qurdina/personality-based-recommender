@@ -24,15 +24,15 @@ ActiveRecord::Schema.define(version: 20170129154012) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.decimal  "avg_posts_sentiment"
+    t.decimal  "words_per_post"
+    t.decimal  "hashtags_per_post"
     t.boolean  "relationship_status"
     t.integer  "last_name_length"
-    t.integer  "activities_length"
+    t.integer  "activties_length"
     t.integer  "favorites_count"
-    t.decimal  "links_per_post"
-    t.decimal  "hashtags_per_post"
-    t.decimal  "words_per_post"
     t.text     "first_name"
     t.text     "last_name"
+    t.decimal  "links_per_post"
     t.index ["user_id"], name: "index_facebooks_on_user_id", using: :btree
   end
 

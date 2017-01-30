@@ -23,5 +23,4 @@ Rails.application.routes.draw do
 
   get 'calculate', to: 'user#calculate'
 
-
 end

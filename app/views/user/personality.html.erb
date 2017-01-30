@@ -1,15 +1,15 @@
-<hr />
+<hr/>
 <div>
   <h3>Facebook login status</h3>
   <p id="user-fb-name" style="display: none;"><%= session[:user_fb_name].nil? ? '' : ('Mire se erdhe, ' + session[:user_fb_name]) %></p>
   <p><a id="btn-login" onclick="return login();" href="#" style="display: none;">Log In</a></p>
   <p><a id="btn-logout" onclick="return logout();" href="#" style="display: none;">Log Out</a></p>
-  <hr />
+  <hr/>
   <p><a id="get-user-info" href="#" style="display: none;">Get User Info</a></p>
   <p><a id="calculate-personality" href="#" style="display: none;">Calculate personality</a></p>
   <!--<p><a id="get-user-friends" href="#" style="display: none;">Get User Friends</a></p>-->
 
-  <input id="fb_id" type="hidden" value="" />
+  <input id="fb_id" type="hidden" value=""/>
 
   <div id="loader" style="display: none;"></div>
 
@@ -17,6 +17,8 @@
     <h2 style="color: green;">Sukses!</h2>
     <p>Te dhenat e juaja u morren me sukses!</p>
   </div>
+
+  <div id="personality_chart_container" style="min-width: 400px; max-width: 600px; height: 400px; margin: 0 auto"></div>
 </div>
 
 <style>
@@ -38,13 +40,21 @@
   }
 
   @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
   }
 
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
   /* Add animation to "page content" */
@@ -57,13 +67,25 @@
   }
 
   @-webkit-keyframes animatebottom {
-    from { bottom:-100px; opacity:0 }
-    to { bottom:0px; opacity:1 }
+    from {
+      bottom: -100px;
+      opacity: 0
+    }
+    to {
+      bottom: 0px;
+      opacity: 1
+    }
   }
 
   @keyframes animatebottom {
-    from{ bottom:-100px; opacity:0 }
-    to{ bottom:0; opacity:1 }
+    from {
+      bottom: -100px;
+      opacity: 0
+    }
+    to {
+      bottom: 0;
+      opacity: 1
+    }
   }
 
   #myDiv {
@@ -74,23 +96,38 @@
 
 
 <script>
-    window.fbAsyncInit = function() {
+    window.fbAsyncInit = function () {
         FB.init({
-            appId      : '1191904330893043',
-            cookie     : true,
-            xfbml      : true,
-            version    : 'v2.8'
+            appId: '1191904330893043',
+            cookie: true,
+            xfbml: true,
+            version: 'v2.8'
         });
         get_status();
     };
 
-    (function(d, s, id){
+    (function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
         js.src = "//connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
+
+    $(window).load(function () {
+
+      /*{
+       openness: -0.268,
+       conscientiousness: -0.030,
+       extraversion: 0.066,
+       agreeableness: -0.044,
+       neuroticism: -0.217
+       }*/
+
+    });
 
     $('#get-user-info').on('click', function () {
         $('#mesazhi').hide();
@@ -111,14 +148,82 @@
         return false;
     });
 
-    $('#calculate-personality').on('click', function(){
+    $('#calculate-personality').on('click', function () {
         $.ajax({
             url: 'calculate',
             data: {fb_id: $('#fb_id').val()},
             success: function (data) {
                 $('#mesazhi p').text(JSON.stringify(data));
+
+                var rescale = function (value) {
+                    min = -0.268;
+                    max = 0.285;
+                    value = parseFloat(value);
+                    return ((100 - 0) * (value - min) ) / (max - min)
+                }
+
+                var data = [
+                    rescale(data.openness),
+                    rescale(data.conscientiousness),
+                    rescale(data.extraversion),
+                    rescale(data.agreeableness),
+                    rescale(data.neuroticism),
+                ];
+
+                Highcharts.chart('personality_chart_container', {
+
+                    chart: {
+                        polar: true,
+                        type: 'line'
+                    },
+
+                    title: {
+                        text: 'Users personality from Facebook Data',
+                        x: -80
+                    },
+
+                    pane: {
+                        size: '80%'
+                    },
+
+                    xAxis: {
+                        categories: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness',
+                            'Neuroticism', 'Administration'],
+                        tickmarkPlacement: 'on',
+                        lineWidth: 0
+                    },
+
+                    yAxis: {
+                        gridLineInterpolation: 'polygon',
+                        lineWidth: 0,
+                        min: 0
+                    },
+
+                    tooltip: {
+                        shared: true,
+                        pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+                    },
+
+                    legend: {
+                        align: 'right',
+                        verticalAlign: 'top',
+                        y: 70,
+                        layout: 'vertical'
+                    },
+
+                    series: [{
+                        name: 'User',
+                        data: data,
+                        pointPlacement: 'on'
+                    }/*, {
+                     name: 'Actual Spending',
+                     data: [50000, 39000, 42000, 31000, 26000, 14000],
+                     pointPlacement: 'on'
+                     }*/]
+
+                });
             },
-            error: function(err1, err2){
+            error: function (err1, err2) {
                 console.log('Error: \n' + JSON.stringify(err1) + '\n' + JSON.stringify(err2));
             }
         });
@@ -143,14 +248,14 @@
     //    });
 
     function login() {
-        FB.login(function(response) {
+        FB.login(function (response) {
             console.log(response);
             if (response.status === 'connected') {
                 alert('Logged in successfully!');
                 $.ajax({
                     url: 'user/login_callback',
                     data: {token: response.authResponse.accessToken},
-                    success: function(data){
+                    success: function (data) {
                         get_status();
                         $('#user-fb-name').text('Mire se erdhe, ' + data.name);
                     },
@@ -163,48 +268,48 @@
             } else {
                 alert("The person is not logged into Facebook, so we're not sure if they are logged into this app or not..");
             }
-        }, {scope:
-        'public_profile,'+
-        'user_friends,'+
-        'email,'+
-        'user_hometown,'+
-        'user_likes,'+
-        'user_location,'+
-        'user_about_me,'+
-        'user_birthday,'+
-        'user_actions.books,'+
-        'user_actions.fitness,'+
-        'user_actions.music,'+
-        'user_actions.news,'+
-        'user_actions.video,'+
-        'user_education_history,'+
-        'user_events,'+
-        'user_games_activity,'+
-        'user_managed_groups,'+
-        'user_photos,'+
-        'user_posts,'+
-        'user_relationships,'+
-        'user_relationship_details,'+
-        'user_religion_politics,'+
-        'user_tagged_places,'+
-        'user_videos,'+
-        'user_website,'+
-        'user_work_history,'+
-        'read_custom_friendlists,'+
-        'read_insights,'+
-        'read_audience_network_insights'
+        }, {
+            scope: 'public_profile,' +
+            'user_friends,' +
+            'email,' +
+            'user_hometown,' +
+            'user_likes,' +
+            'user_location,' +
+            'user_about_me,' +
+            'user_birthday,' +
+            'user_actions.books,' +
+            'user_actions.fitness,' +
+            'user_actions.music,' +
+            'user_actions.news,' +
+            'user_actions.video,' +
+            'user_education_history,' +
+            'user_events,' +
+            'user_games_activity,' +
+            'user_managed_groups,' +
+            'user_photos,' +
+            'user_posts,' +
+            'user_relationships,' +
+            'user_relationship_details,' +
+            'user_religion_politics,' +
+            'user_tagged_places,' +
+            'user_videos,' +
+            'user_website,' +
+            'user_work_history,' +
+            'read_custom_friendlists,' +
+            'read_insights,' +
+            'read_audience_network_insights'
 //                'read_page_mailboxes'
         });
         return false;
     }
 
     function logout() {
-        FB.logout(function(response) {
+        FB.logout(function (response) {
             // Person is now logged out
             alert('logged out');
             $.ajax({
                 url: 'user/logout_callback',
-                success: function(data){
+                success: function (data) {
                     $('#user-fb-name').text('');
                     get_status();
                 },
@@ -217,16 +322,16 @@
     }
 
     function get_status() {
-        FB.getLoginStatus(function(response) {
+        FB.getLoginStatus(function (response) {
             var $btn_login = $('#btn-login');
             var $btn_logout = $('#btn-logout');
             var $user_info = $('#get-user-info');
             var $user_friends = $('#get-user-friends');
             var $user_fb_name = $('#user-fb-name');
-            if(response.status == 'connected'){
+            if (response.status == 'connected') {
                 $btn_login.hide();
                 $btn_logout.show();
-                FB.api('/me?fields=name', function(response) {
+                FB.api('/me?fields=name', function (response) {
                     $user_fb_name.text('Mire se erdhe, ' + response.name).show();
                 });
                 $user_info.show();
