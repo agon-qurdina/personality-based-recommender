@@ -1,0 +1,47 @@
+<h3>User Personality</h3>
+<table border="10" cellpadding="10" cellspacing="10">
+    <thead>
+      <tr>
+        <th>User Id</th>
+        <th>Extraversion</th>
+        <th>Agreeableness</th>
+        <th>Conscientiousness</th>
+        <th>Neuroticism</th>
+        <th>Openness</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><%= current_user.id %></td>
+      <td><%= @user[:extraversion] %></td>
+      <td><%= @user[:agreeableness] %></td>
+      <td><%= @user[:conscientiousness] %></td>
+      <td><%= @user[:neuroticism] %></td>
+      <td><%= @user[:openness] %></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Closest products based on user's personality</h3>
+<table border="1" cellpadding="10" cellspacing="10">
+  <tr>
+    <th>Product Id</th>
+    <th>Extraversion</th>
+    <th>Agreeableness</th>
+    <th>Conscientiousness</th>
+    <th>Neuroticism</th>
+    <th>Openness</th>
+    <th>Distance</th>
+  </tr>
+  <% @products.each do |product| %>
+  <tr>
+    <td><%= product.id %></td>
+    <td><%= product.extraversion %></td>
+    <td><%= product.agreeableness %></td>
+    <td><%= product.conscientiousness %></td>
+    <td><%= product.neuroticism %></td>
+    <td><%= product.openness %></td>
+    <td><b><%= product.distance %></b></td>
+  </tr>
+  <% end %>
+</table>

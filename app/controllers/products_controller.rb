@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :test_personality]
   before_action :authenticate_user!, only: [:purchase, :index]
 
   def home
@@ -89,6 +89,11 @@ class ProductsController < ApplicationController
     product.save!
 
     render json: { success: true }
+  end
+
+  def test_personality
+    @products = Product.with_distance_from(@product.avg_personality).where('id != ?',@product.id).order('distance').select('id,extraversion,agreeableness,conscientiousness,neuroticism,openness,distance').limit(10).to_a
+    render 'products/test', layout: false
   end
 
   private

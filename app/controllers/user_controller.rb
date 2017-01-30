@@ -6,6 +6,14 @@ class UserController < ApplicationController
   def personality
   end
 
+  def test_personality
+    @products = Product.with_distance_from(current_user.personality_hash).order('distance').select('id,extraversion,agreeableness,conscientiousness,neuroticism,openness,distance').limit(10).to_a
+
+    @user = current_user.personality_hash
+
+    render 'user/test', layout: false and return
+  end
+
   def login_callback
     token = params[:token]
     session[:user_fb_token] = token

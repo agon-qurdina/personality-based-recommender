@@ -3,6 +3,10 @@
 <input type="hidden" id="product_id" value="<%= @product.id %>" />
 
 <p>
+  <img width="250" height="250" src="<%= @product.image %>" />
+</p>
+
+<p>
   <strong>Title:</strong>
   <%= @product.title %>
 </p>
@@ -17,33 +21,25 @@
   <%= @product.code %>
 </p>
 
-<p>
-  <strong>Product image:</strong>
-  <%= @product.image %>
-</p>
+<br />
 
-<%= link_to 'Edit', edit_product_path(@product) %> |
-<%= link_to 'Back', products_path %>
-
-<button id="btn-purchase">Purchase Product</button>
+<div class="btn">
+  <a id="btn-purchase" class="btn" href="#">Purchase Product</a>
+</div>
 
 <br />
 
 <h3>Similar Products</h3>
-<table border="1">
+<table cellpadding="10" cellspacing="5">
   <tr>
-<%
-  @similar_products.each do |product|
-%>
+<% @similar_products.each do |product| %>
   <td>
     <a href="/products/<%= product.id %>">
-      <img src="<%= image_url(product.image) %>" />
-      <span><%= product.title %></span>
+      <img width="250" height="250" src="<%= image_url(product.image) %>" />
+      <p><%= product.title %></p>
     </a>
   </td>
-<%
-  end
-%>
+<% end %>
   </tr>
 </table>
 
@@ -74,5 +70,6 @@
               }
           });
       }
+      return false;
   });
 </script>
