@@ -13,11 +13,11 @@
   <tbody>
   <tr>
     <td><%= @product.id %></td>
-    <td><%= @product[:extraversion] %></td>
-    <td><%= @product[:agreeableness] %></td>
-    <td><%= @product[:conscientiousness] %></td>
-    <td><%= @product[:neuroticism] %></td>
-    <td><%= @product[:openness] %></td>
+    <td><%= @product[:extraversion].round(3) %></td>
+    <td><%= @product[:agreeableness].round(3) %></td>
+    <td><%= @product[:conscientiousness].round(3) %></td>
+    <td><%= @product[:neuroticism].round(3) %></td>
+    <td><%= @product[:openness].round(3) %></td>
   </tr>
   </tbody>
 </table>
@@ -36,12 +36,98 @@
   <% @products.each do |product| %>
       <tr>
         <td><%= product.id %></td>
-        <td><%= product.extraversion %></td>
-        <td><%= product.agreeableness %></td>
-        <td><%= product.conscientiousness %></td>
-        <td><%= product.neuroticism %></td>
-        <td><%= product.openness %></td>
+        <td><%= product.extraversion.round(3) %></td>
+        <td><%= product.agreeableness.round(3) %></td>
+        <td><%= product.conscientiousness.round(3) %></td>
+        <td><%= product.neuroticism.round(3) %></td>
+        <td><%= product.openness.round(3) %></td>
         <td><b><%= product.distance %></b></td>
       </tr>
   <% end %>
 </table>
+
+<div id="personality_chart_container" style="min-width: 800px; max-width: 1000px; height: 800px; margin: 0 auto"></div>
+
+<%= javascript_include_tag '/js/jquery.min', 'data-turbolinks-track': 'reload' %>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<script>
+    $(window).load(function () {
+        var rescale = function (value) {
+            min = -0.268;
+            max = 0.285;
+            value = parseFloat(value);
+            return ((100 - 0) * (value - min) ) / (max - min)
+        }
+
+        var data = [
+            rescale(<%= @product[:openness] %>),
+            rescale(<%= @product[:conscientiousness] %>),
+            rescale(<%= @product[:extraversion] %>),
+            rescale(<%= @product[:agreeableness] %>),
+            rescale(<%= @product[:neuroticism] %>),
+        ];
+
+        Highcharts.chart('personality_chart_container', {
+
+            chart: {
+                polar: true,
+                type: 'line'
+            },
+
+            title: {
+                text: 'Product vs Nearest Products by average personality',
+                x: -80
+            },
+
+            pane: {
+                size: '80%'
+            },
+
+            xAxis: {
+                categories: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness',
+                    'Neuroticism', 'Administration'],
+                tickmarkPlacement: 'on',
+                lineWidth: 0
+            },
+
+            yAxis: {
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0
+            },
+
+            tooltip: {
+                shared: true,
+                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'top',
+                y: 70,
+                layout: 'vertical'
+            },
+
+            series: [{
+                name: 'Product',
+                data: data,
+                pointPlacement: 'on'
+            }<%@products.each do |product| %>
+                , {
+                    name: '<%= product.title.to_s.strip %>',
+                    data: [rescale(<%= product.openness %>),
+                        rescale(<%= product.conscientiousness %>),
+                        rescale(<%= product.extraversion %>),
+                        rescale(<%= product.agreeableness %>),
+                        rescale(<%= product.neuroticism %>)],
+                    pointPlacement: 'on'
+                }
+                <%end %>
+            ]
+
+        });
+    })
+</script>

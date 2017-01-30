@@ -14,7 +14,7 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
-    @similar_products = Product.with_distance_from(@product.avg_personality).where('id != ?',@product.id).order('distance').first(5)
+    @similar_products = Product.with_distance_from(@product.avg_personality).where('id != ?', @product.id).order('distance').first(5)
   end
 
   # GET /products/new
@@ -92,18 +92,20 @@ class ProductsController < ApplicationController
   end
 
   def test_personality
-    @products = Product.with_distance_from(@product.avg_personality).where('id != ?',@product.id).order('distance').select('id,extraversion,agreeableness,conscientiousness,neuroticism,openness,distance').limit(10).to_a
+    @products = Product.with_distance_from(@product.avg_personality)
+                    .where('id != ?', @product.id).order('distance')
+                    .limit(10).to_a
     render 'products/test', layout: false
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_product
+    @product = Product.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def product_params
-      params.require(:product).permit(:title, :description, :code, :image)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def product_params
+    params.require(:product).permit(:title, :description, :code, :image)
+  end
 end

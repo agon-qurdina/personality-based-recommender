@@ -1,5 +1,6 @@
 class UserController < ApplicationController
   before_action :authenticate_user!, only: [:personality, :get_fb_info, :calculate]
+
   def login
   end
 
@@ -7,7 +8,9 @@ class UserController < ApplicationController
   end
 
   def test_personality
-    @products = Product.with_distance_from(current_user.personality_hash).order('distance').select('id,extraversion,agreeableness,conscientiousness,neuroticism,openness,distance').limit(10).to_a
+    @products = Product.with_distance_from(current_user.personality_hash)
+                    .order('distance')
+                    .limit(10).to_a
 
     @user = current_user.personality_hash
 
@@ -18,7 +21,7 @@ class UserController < ApplicationController
     token = params[:token]
     session[:user_fb_token] = token
     graph_api = Koala::Facebook::API.new(token, '99c84ab6d14e8826ca63b2b06ba8ab31')
-    response = graph_api.get_object(:me, { fields: [:name]})
+    response = graph_api.get_object(:me, { fields: [:name] })
     name = response['name'].nil? ? '' : response['name']
     session[:user_fb_name] = name
     # @fb = FbStat.new
@@ -28,7 +31,7 @@ class UserController < ApplicationController
   def logout_callback
     session[:user_fb_token] = nil
     session[:user_fb_name] = nil
-    render json: { }
+    render json: {}
   end
 
   def get_fb_info
@@ -36,7 +39,7 @@ class UserController < ApplicationController
     facebook = Facebook.new
     facebook.access_token=oauth_access_token
 
-    Facebook.destroy_all({user_id: current_user.id})
+    Facebook.destroy_all({ user_id: current_user.id })
 
     # if Facebook.exists?({fb_id: facebook.fb_id})
     #   old_facebook = Facebook.where({fb_id: facebook.fb_id}).first
@@ -68,9 +71,9 @@ class UserController < ApplicationController
     facebook = nil
 
     if params[:fb_id].nil? or params[:fb_id].empty?
-      facebook = Facebook.where({user_id: current_user.id}).last
+      facebook = Facebook.where({ user_id: current_user.id }).last
     else
-      facebook = Facebook.where({fb_id: params[:fb_id]}).last
+      facebook = Facebook.where({ fb_id: params[:fb_id] }).last
     end
     if facebook.nil?
       return render json: 'No Facebook accounts registered for user!'
