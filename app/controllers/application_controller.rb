@@ -12,7 +12,12 @@ class ApplicationController < ActionController::Base
 
     # Product.with_distance_from(User.first.personality_hash)
 
-    @products = Product.with_distance_from(current_user.personality_hash).order('distance').select('id,extraversion,agreeableness,conscientiousness,neuroticism,openness,distance').limit(5).to_a
+    @products = Product.with_distance_from(current_user.personality_hash).order('distance').select('id,extraversion,agreeableness,conscientiousness,neuroticism,openness,distance').limit(10).to_a
+
+    @user = current_user.personality_hash
+
+    render 'user/test', layout: false and return
+
 
     render json: { user: current_user.personality_hash, products_to_user: @products }
   end

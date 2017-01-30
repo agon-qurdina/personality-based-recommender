@@ -1,12 +1,12 @@
 <hr/>
 <div>
-  <h3>Facebook login status</h3>
-  <p id="user-fb-name" style="display: none;"><%= session[:user_fb_name].nil? ? '' : ('Mire se erdhe, ' + session[:user_fb_name]) %></p>
-  <p><a id="btn-login" onclick="return login();" href="#" style="display: none;">Log In</a></p>
-  <p><a id="btn-logout" onclick="return logout();" href="#" style="display: none;">Log Out</a></p>
-  <hr/>
-  <p><a id="get-user-info" href="#" style="display: none;">Get User Info</a></p>
-  <p><a id="calculate-personality" href="#" style="display: none;">Calculate personality</a></p>
+  <h2>Facebook login status</h2>
+  <p id="user-fb-name" style="display: none;margin-left: 30px;"><%= session[:user_fb_name].nil? ? '' : ('Mire se erdhe, ' + session[:user_fb_name]) %></p>
+  <div class="btn"><a id="btn-login" onclick="return login();" href="#" style="display: none;">Log In</a></div>
+  <div class="btn"><a id="btn-logout" onclick="return logout();" href="#" style="display: none;">Log Out</a></div>
+  <hr />
+  <div class="btn"><a id="get-user-info" href="#" style="display: none;">Import User Info</a></div>
+  <div class="btn"><a id="calculate-personality" href="#">Calculate personality</a></div>
   <!--<p><a id="get-user-friends" href="#" style="display: none;">Get User Friends</a></p>-->
 
   <input id="fb_id" type="hidden" value=""/>
@@ -37,6 +37,10 @@
     height: 120px;
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
+  }
+
+  div.btn{
+    margin: 30px 30px 30px 30px;
   }
 
   @-webkit-keyframes spin {
