@@ -1,12 +1,11 @@
 require 'google/apis/translate_v2'
 class Facebook < ApplicationRecord
-  #10203046630585298?fields=context.fields(mutual_friends)
   def profile
     graph_api.get_object('me')
   end
 
   def graph_api
-      @graph ||= Koala::Facebook::API.new(access_token, '99c84ab6d14e8826ca63b2b06ba8ab31')
+      @graph ||= Koala::Facebook::API.new(access_token, '{app_secret}')
   end
 
   def friends_count

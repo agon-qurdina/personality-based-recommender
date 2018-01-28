@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
     # Product.import
 
     # Calculates AVG personalities based on purchases and updates products
-    Product.update_personalities!
+    #Product.update_personalities!
 
     # Order products by personality usage
     # products = Product.with_distance_from(Product.first.avg_personality).to_a

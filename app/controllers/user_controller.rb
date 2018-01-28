@@ -20,7 +20,7 @@ class UserController < ApplicationController
   def login_callback
     token = params[:token]
     session[:user_fb_token] = token
-    graph_api = Koala::Facebook::API.new(token, '99c84ab6d14e8826ca63b2b06ba8ab31')
+    graph_api = Koala::Facebook::API.new(token, '{app_secret}')
     response = graph_api.get_object(:me, { fields: [:name] })
     name = response['name'].nil? ? '' : response['name']
     session[:user_fb_name] = name
